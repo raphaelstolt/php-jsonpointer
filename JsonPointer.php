@@ -1,8 +1,8 @@
 <?php
-    /**
-     * @author Raphael Stolt <raphael.stolt@gmail.com>
-	 * @license Doowutchyalikewithit License
-	 */
+/**
+  * @author  Raphael Stolt <raphael.stolt@gmail.com>
+  * @license http://is.gd/doowutchyalikewithit Doowutchyalikewithit License
+  */
 class JsonPointer
 {
     const POINTER_CHAR = '/';
