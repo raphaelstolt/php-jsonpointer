@@ -22,8 +22,6 @@ This is an implementation of [JSON Pointer](http://tools.ietf.org/html/draft-pbr
 
     $all = $jsonPointer->get("/"); // string('{"bar":{"baz":2},"qux":[3,4,5]}')
 
-    jsonpointer.set(obj, "/foo", 6); // obj.foo = 6;
-
 ## Testing
 
     $ phpunit --configuration phpunit.dist.xml
