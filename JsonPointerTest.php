@@ -251,6 +251,27 @@ class JsonPointerTest extends PHPUnit_Framework_TestCase
         $this->assertSame('a2b', $jsonPointer->get('/categories/a/a2/1'));
     }
     /**
+     * @test
+     */
+    public function getShouldReturnExpectedValueOfPointerWithSlashInKey()
+    {
+        $givenJson = '{"test/foo.txt":{"size":1521,"description":"Text File"}}';
+        $jsonPointer = new JsonPointer($givenJson);
+        $this->assertSame(1521, $jsonPointer->get('/test%2Ffoo.txt/size'));
+    }
+    /**
+     * @test
+     */
+    public function setShouldReplaceValueOfPointerWithSlashInKey()
+    {
+        $givenJson = '{"test/foo.txt":{"size":1521,"description":"Text File"}}';
+        $jsonPointer = new JsonPointer($givenJson);
+        $jsonPointer->set('/test%2Ffoo.txt/size', 2222);
+        $pointedJson = $jsonPointer->get('/');
+        $pointedData = json_decode($pointedJson);
+        $this->assertSame(2222, $pointedData->{'test/foo.txt'}->{'size'});
+    }
+    /**
      * @return array
      */
     public function nonStringPointerProvider()
