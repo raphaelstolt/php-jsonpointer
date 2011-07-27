@@ -30,7 +30,7 @@ class JsonPointer
         if ($pointer === self::POINTER_CHAR) {
             return json_encode($this->json);
         }
-        $plainPointerParts = array_slice(explode('/', $pointer), 1);
+        $plainPointerParts = array_slice(array_map("urldecode", explode('/', $pointer)), 1);
 
         return $this->traverse($this->json, $plainPointerParts);
     }    
