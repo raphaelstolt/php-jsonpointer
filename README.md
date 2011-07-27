@@ -5,6 +5,7 @@ This is an implementation of [JSON Pointer](http://tools.ietf.org/html/draft-pbr
 ## Usage
 
     require_once 'JsonPointer.php';
+    
     $json = '{"foo":1,"bar":{"baz":2},"qux":[3,4,5]}';
     $jsonPointer = new JsonPointer($json);
 
@@ -25,7 +26,7 @@ This is an implementation of [JSON Pointer](http://tools.ietf.org/html/draft-pbr
 ## Testing
 
     $ phpunit --configuration phpunit.dist.xml
-    OK (40 tests, 75 assertions)
+    OK (42 tests, 77 assertions)
     $
     
 ## Author
