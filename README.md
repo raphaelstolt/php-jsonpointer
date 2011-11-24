@@ -25,7 +25,7 @@ This is an implementation of [JSON Pointer](http://tools.ietf.org/html/draft-pbr
 
 ## Testing
 
-    $ phpunit --configuration phpunit.dist.xml
+    $ phpunit --configuration phpunit.xml.dist
     OK (42 tests, 77 assertions)
     $
     
