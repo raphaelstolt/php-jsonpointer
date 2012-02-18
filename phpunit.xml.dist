@@ -1,4 +1,5 @@
-<phpunit backupGlobals="false"
+<phpunit bootstrap="./tests/bootstrap.php"
+         backupGlobals="false"
          backupStaticAttributes="false"
          colors="true"
          convertErrorsToExceptions="true"
@@ -17,7 +18,7 @@
          verbose="false">
 <testsuites>
   <testsuite name="Json Pointer Test Suite">
-    <directory>.</directory>
+    <directory>./tests</directory>
   </testsuite>
 </testsuites>
 </phpunit>

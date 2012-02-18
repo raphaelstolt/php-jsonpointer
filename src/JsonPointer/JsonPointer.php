@@ -1,4 +1,7 @@
 <?php
+namespace JsonPointer;
+
+use JsonPointer\Exception as Exception;
 /**
   * @author  Raphael Stolt <raphael.stolt@gmail.com>
   * @license http://is.gd/doowutchyalikewithit Doowutchyalikewithit License
@@ -30,7 +33,7 @@ class JsonPointer
         if ($pointer === self::POINTER_CHAR) {
             return json_encode($this->json);
         }
-        $plainPointerParts = array_slice(array_map("urldecode", explode('/', $pointer)), 1);
+        $plainPointerParts = array_slice(array_map('urldecode', explode('/', $pointer)), 1);
 
         return $this->traverse($this->json, $plainPointerParts);
     }    
@@ -47,7 +50,7 @@ class JsonPointer
         if ($pointer === self::POINTER_CHAR) {
             return json_encode($this->json);
         }
-        $plainPointerParts = array_slice(array_map("urldecode", explode('/', $pointer)), 1);
+        $plainPointerParts = array_slice(array_map('urldecode', explode('/', $pointer)), 1);
 
         $overwrite = false;
         if ($value === null) {
@@ -80,7 +83,7 @@ class JsonPointer
                     if (ctype_digit($pointerPart)) {
                         $json = array_values($json);
                     }
-                                  
+
                     return $formerValue;
                 }
 
@@ -92,6 +95,9 @@ class JsonPointer
 
         return null;
     }
+   /**
+    * @throws Rs\JsonPointer\Exception
+    */
     private function validateJson()
     {
         if ($this->json === null) {
@@ -103,6 +109,7 @@ class JsonPointer
     }
     /**
      * @param string $pointer The Json Pointer
+     * @throws Rs\JsonPointer\Exception
      */
     private function validatePointer($pointer)
     {
@@ -111,7 +118,7 @@ class JsonPointer
         }
         if (trim($pointer) === '') {
             throw new Exception('Pointer is empty');
-        }       
+        }
         if (substr($pointer, 0, 1) !== self::POINTER_CHAR) {
             throw new Exception('Pointer starts with invalid character');
         }

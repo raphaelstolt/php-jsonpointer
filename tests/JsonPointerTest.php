@@ -1,21 +1,24 @@
 <?php
-require_once 'JsonPointer.php';
+namespace JsonPointer;
 
-class JsonPointerTest extends PHPUnit_Framework_TestCase
+use JsonPointer\JsonPointer,
+    \ArrayObject;
+
+class JsonPointerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
-     * @expectedException Exception
+     * @expectedException JsonPointer\Exception
      * @expectedExceptionMessage Pointer starts with invalid character
      */
     public function getShouldThrowExpectedExceptionWhenPointerStartsWithInvalidPointerChar()
     {
         $jsonPointer = new JsonPointer('{"a": 1}');
         $jsonPointer->get('#');
-    }    
+    }
     /**
      * @test
-     * @expectedException Exception
+     * @expectedException JsonPointer\Exception
      * @expectedExceptionMessage Pointer starts with invalid character
      */
     public function setShouldThrowExpectedExceptionWhenPointerStartsWithInvalidPointerChar()
@@ -26,7 +29,7 @@ class JsonPointerTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      * @dataProvider nonStringPointerProvider
-     * @expectedException Exception
+     * @expectedException JsonPointer\Exception
      * @expectedExceptionMessage Pointer is not a string
      */
     public function getShouldThrowExpectedExceptionWhenPointerIsNotAString($nonStringPointer)
@@ -37,7 +40,7 @@ class JsonPointerTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      * @dataProvider emptyPointerProvider
-     * @expectedException Exception
+     * @expectedException JsonPointer\Exception
      * @expectedExceptionMessage Pointer is empty
      */
     public function getShouldThrowExpectedExceptionWhenUsingAnEmptyPointer($emptyPointer)
@@ -48,7 +51,7 @@ class JsonPointerTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      * @dataProvider nonStringPointerProvider
-     * @expectedException Exception
+     * @expectedException JsonPointer\Exception
      * @expectedExceptionMessage Pointer is not a string
      */
     public function setShouldThrowExpectedExceptionWhenPointerIsNotAString($nonStringPointer)
@@ -59,7 +62,7 @@ class JsonPointerTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      * @dataProvider emptyPointerProvider
-     * @expectedException Exception
+     * @expectedException JsonPointer\Exception
      * @expectedExceptionMessage Pointer is empty
      */
     public function setShouldThrowExpectedExceptionWhenUsingAnEmptyPointer($emptyPointer)
@@ -68,7 +71,7 @@ class JsonPointerTest extends PHPUnit_Framework_TestCase
         $jsonPointer->set($emptyPointer, 'test');
     }
     /**
-     * @expectedException Exception
+     * @expectedException JsonPointer\Exception
      * @expectedExceptionMessage Invalid Json to point through
      * @dataProvider invalidJsonProvider
      * @test
@@ -79,7 +82,7 @@ class JsonPointerTest extends PHPUnit_Framework_TestCase
         $jsonPointer->get('/');
     }
     /**
-     * @expectedException Exception
+     * @expectedException JsonPointer\Exception
      * @expectedExceptionMessage Invalid Json to point through
      * @dataProvider invalidJsonProvider
      * @test
@@ -90,7 +93,7 @@ class JsonPointerTest extends PHPUnit_Framework_TestCase
         $jsonPointer->set('/', 'test');
     }
     /**
-     * @expectedException Exception
+     * @expectedException JsonPointer\Exception
      * @expectedExceptionMessage Non walkable Json to point through
      * @dataProvider nonWalkableJsonProvider
      * @test
@@ -101,7 +104,7 @@ class JsonPointerTest extends PHPUnit_Framework_TestCase
         $jsonPointer->get('/');
     }
     /**
-     * @expectedException Exception
+     * @expectedException JsonPointer\Exception
      * @expectedExceptionMessage Non walkable Json to point through
      * @dataProvider nonWalkableJsonProvider
      * @test
@@ -158,8 +161,8 @@ class JsonPointerTest extends PHPUnit_Framework_TestCase
     {
         $givenJson = '{"status": ["done", "started", "planned"]}';
         $jsonPointer = new JsonPointer($givenJson);
-		$this->assertSame('started', $jsonPointer->set('/status/1', 'scheduled'));
-		$this->assertSame('scheduled', $jsonPointer->get('/status/1'));
+        $this->assertSame('started', $jsonPointer->set('/status/1', 'scheduled'));
+        $this->assertSame('scheduled', $jsonPointer->get('/status/1'));
     }
     /**
      * @test
@@ -168,18 +171,18 @@ class JsonPointerTest extends PHPUnit_Framework_TestCase
     {
         $givenJson = '{"status": ["done", "started", "planned"]}';
         $jsonPointer = new JsonPointer($givenJson);
-		$this->assertSame('started', $jsonPointer->set('/status/1', 'urgentstuff [#pt.1] {\/}'));
-		$this->assertSame('urgentstuff [#pt.1] {\/}', $jsonPointer->get('/status/1'));
+        $this->assertSame('started', $jsonPointer->set('/status/1', 'urgentstuff [#pt.1] {\/}'));
+        $this->assertSame('urgentstuff [#pt.1] {\/}', $jsonPointer->get('/status/1'));
     }
     /**
      * @test
      */
     public function setShouldOverwriteValueOfSecondElementBelowDeepNamedPointer()
     {
-		$givenJson = '{"categories":{"a":{"a1":{"a1a":["a1aa"],"a1b":["a1bb"]},"a2":["a2a","a2b"]}}}';
+        $givenJson = '{"categories":{"a":{"a1":{"a1a":["a1aa"],"a1b":["a1bb"]},"a2":["a2a","a2b"]}}}';
         $jsonPointer = new JsonPointer($givenJson);
-		$this->assertSame('a2a', $jsonPointer->set('/categories/a/a2/0', 'a222222a'));
-		$this->assertSame('a222222a', $jsonPointer->get('/categories/a/a2/0'));
+        $this->assertSame('a2a', $jsonPointer->set('/categories/a/a2/0', 'a222222a'));
+        $this->assertSame('a222222a', $jsonPointer->get('/categories/a/a2/0'));
     }
     /**
      * @test
@@ -188,31 +191,31 @@ class JsonPointerTest extends PHPUnit_Framework_TestCase
     {
         $givenJson = '{"status": ["done", "started", "planned"]}';
         $jsonPointer = new JsonPointer($givenJson);
-		$this->assertSame('done', $jsonPointer->set('/status/0'));
-		$this->assertTrue(count($jsonPointer->get('/status')) === 2);
-		$this->assertSame('started', $jsonPointer->get('/status/0'));
-		$this->assertSame('planned', $jsonPointer->get('/status/1'));
+        $this->assertSame('done', $jsonPointer->set('/status/0'));
+        $this->assertTrue(count($jsonPointer->get('/status')) === 2);
+        $this->assertSame('started', $jsonPointer->get('/status/0'));
+        $this->assertSame('planned', $jsonPointer->get('/status/1'));
     }
     /**
      * @test
      */
-	public function removalOfFooShouldKeepTheAssociativeIndexOfQux()
-	{
+    public function removalOfFooShouldKeepTheAssociativeIndexOfQux()
+    {
         $givenJson = '{"foo":1,"bar":{"baz":2},"qux":[3,4,5]}';
         $jsonPointer = new JsonPointer($givenJson);
-		$this->assertSame(1, $jsonPointer->set('/foo'));
-		$this->assertSame('{"bar":{"baz":2},"qux":[3,4,5]}', $jsonPointer->get('/'));
-	}
+        $this->assertSame(1, $jsonPointer->set('/foo'));
+        $this->assertSame('{"bar":{"baz":2},"qux":[3,4,5]}', $jsonPointer->get('/'));
+    }
     /**
      * @test
      */
     public function setShouldUnsetSecondElementBelowBelowDeepNamedPointer()
     {
-		$givenJson = '{"categories":{"a":{"a1":{"a1a":["a1aa"],"a1b":["a1bb"]},"a2":["a2a","a2b"]}}}';
+        $givenJson = '{"categories":{"a":{"a1":{"a1a":["a1aa"],"a1b":["a1bb"]},"a2":["a2a","a2b"]}}}';
         $jsonPointer = new JsonPointer($givenJson);
-		$this->assertSame('a2b', $jsonPointer->set('/categories/a/a2/1'));
-		$this->assertTrue(count($jsonPointer->get('/categories/a/a2')) === 1);
-		$this->assertSame('a2a', $jsonPointer->get('/categories/a/a2/0'));
+        $this->assertSame('a2b', $jsonPointer->set('/categories/a/a2/1'));
+        $this->assertTrue(count($jsonPointer->get('/categories/a/a2')) === 1);
+        $this->assertSame('a2a', $jsonPointer->get('/categories/a/a2/0'));
     }
     /**
      * @test
@@ -222,7 +225,7 @@ class JsonPointerTest extends PHPUnit_Framework_TestCase
         $givenJson = '["done", "started", "planned","pending","archived"]';
         $jsonPointer = new JsonPointer($givenJson);
         $this->assertSame('pending', $jsonPointer->get('/3'));
-    }    
+    }
     /**
      * @test
      */
@@ -282,7 +285,7 @@ class JsonPointerTest extends PHPUnit_Framework_TestCase
           array(new ArrayObject()),
           array(null),
         );
-    }   
+    }
     /**
      * @return array
      */
@@ -304,7 +307,7 @@ class JsonPointerTest extends PHPUnit_Framework_TestCase
           array('{}}'),
         );
     }
-	/**
+    /**
      * @return array
      */
     public function nonWalkableJsonProvider()

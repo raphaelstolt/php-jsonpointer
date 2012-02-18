@@ -4,8 +4,10 @@ This is an implementation of [JSON Pointer](http://tools.ietf.org/html/draft-pbr
 
 ## Usage
 
-    require_once 'JsonPointer.php';
-    
+    require_once 'src/JsonPointer/JsonPointer.php';
+
+    use JsonPointer\JsonPointer;
+
     $json = '{"foo":1,"bar":{"baz":2},"qux":[3,4,5]}';
     $jsonPointer = new JsonPointer($json);
 
@@ -31,7 +33,7 @@ This is an implementation of [JSON Pointer](http://tools.ietf.org/html/draft-pbr
     
 ## Author
 
-(c) 2011 Raphael Stolt <@raphaelstolt>
+(c) 2011-2012 Raphael Stolt <@raphaelstolt>
 
 ## License
 
