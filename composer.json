@@ -1,0 +1,23 @@
+{
+    "name": "php-jsonpointer/php-jsonpointer",
+    "description": "Implementation of JSON Pointer (http://tools.ietf.org/html/draft-pbryan-zyp-json-pointer-00)",
+    "keywords": ["json", "json pointer"],
+    "homepage": "https://github.com/raphaelstolt/php-jsonpointer",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Raphael Stolt",
+            "email": "raphael.stolt@gmail.com",
+            "homepage": "http://raphaelstolt.blogspot.com/"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0"
+    },
+    "autoload": {
+        "psr-0": {
+            "JsonPointer": "src/"
+        }
+    }
+}
