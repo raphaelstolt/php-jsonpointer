@@ -33,7 +33,7 @@ This is an implementation of [JSON Pointer](http://tools.ietf.org/html/draft-pbr
 
 Download the [`composer.phar`](http://getcomposer.org/composer.phar) executable
 
-Create/modify **composer.json** in the *your* projects \_\_ROOT_DIRECTORY\_\_ by adding the `php-jsonpointer` dependency. 
+Create/modify **composer.json** in the *your* projects \_\_ROOT_DIRECTORY__ by adding the `php-jsonpointer` dependency. 
     
     {
         "require": {
@@ -53,7 +53,7 @@ Use JSON Pointer via the available Composer **autoload file**.
     $json = '{"foo":1,"bar":{"baz":2},"qux":[3,4,5]}';
     $jsonPointer = new JsonPointer($json);
 
-    $all = $jsonPointer->get("/");
+    $all = $jsonPointer->get("/"); // string('{"foo":1,"bar":{"baz":2},"qux":[3,4,5]}')
 
 ## Testing
 
