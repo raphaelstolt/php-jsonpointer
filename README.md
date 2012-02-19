@@ -2,10 +2,11 @@
 
 [![Build Status](https://secure.travis-ci.org/raphaelstolt/php-jsonpointer.png)](http://travis-ci.org/raphaelstolt/php-jsonpointer)
 
-This is an implementation of [JSON Pointer](http://tools.ietf.org/html/draft-pbryan-zyp-json-pointer-00) written in PHP. Triggered by @janl's node.js [implementation](https://github.com/janl/node-jsonpointer) and beeing a bit bored.
+This is an implementation of [JSON Pointer](http://tools.ietf.org/html/draft-pbryan-zyp-json-pointer-00) written in PHP. Triggered by @janl's node.js [implementation](https://github.com/janl/node-jsonpointer) and being a bit bored.
 
 ## Usage
 
+    <?php
     require_once 'src/JsonPointer/JsonPointer.php';
 
     use JsonPointer\JsonPointer;
@@ -27,6 +28,33 @@ This is an implementation of [JSON Pointer](http://tools.ietf.org/html/draft-pbr
 
     $all = $jsonPointer->get("/"); // string('{"bar":{"baz":2},"qux":[3,4,5]}')
 
+
+## Installation and usage via [Composer](http://packagist.org/about-composer)
+
+Download the [`composer.phar`](http://getcomposer.org/composer.phar) executable
+
+Create/modify **composer.json** in the *your* projects \_\_ROOT_DIRECTORY\_\_ by adding the `php-jsonpointer` dependency. 
+    
+    {
+        "require": {
+            "php-jsonpointer/php-jsonpointer": "master-dev"
+        }
+    }
+
+Run Composer: `php composer.phar install` or `php composer.phar update`
+
+Use JSON Pointer via the available Composer **autoload file**.
+
+    <?php
+    require_once 'vendor/.composer/autoload.php';
+
+    use JsonPointer\JsonPointer;
+
+    $json = '{"foo":1,"bar":{"baz":2},"qux":[3,4,5]}';
+    $jsonPointer = new JsonPointer($json);
+
+    $all = $jsonPointer->get("/");
+
 ## Testing
 
     $ phpunit --configuration phpunit.xml.dist
@@ -35,7 +63,7 @@ This is an implementation of [JSON Pointer](http://tools.ietf.org/html/draft-pbr
     
 ## Author
 
-(c) 2011-2012 Raphael Stolt <@raphaelstolt>
+(c) 2011-2012 Raphael Stolt \<raphael.stolt@gmail.com\>
 
 ## License
 
