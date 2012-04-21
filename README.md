@@ -46,7 +46,7 @@ Run Composer: `php composer.phar install` or `php composer.phar update`
 Use JSON Pointer via the available Composer **autoload file**.
 
     <?php
-    require_once 'vendor/.composer/autoload.php';
+    require_once 'vendor/autoload.php';
 
     use JsonPointer\JsonPointer;
 
