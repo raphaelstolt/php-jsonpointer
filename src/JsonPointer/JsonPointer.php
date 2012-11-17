@@ -10,6 +10,7 @@ use JsonPointer\Exception as Exception,
 class JsonPointer
 {
     const POINTER_CHAR = '/';
+    const LAST_ARRAY_ELEMENT_CHAR = '-';
     
     /**
      * @var array
@@ -42,7 +43,6 @@ class JsonPointer
             array_map('urldecode', explode('/', $pointer)), 
             1
         );
-
         return $this->traverse($this->json, $plainPointerParts);
     }
     /**
@@ -106,8 +106,10 @@ class JsonPointer
                     $overwrite
                 );
             }
+        } elseif ($pointerPart === self::LAST_ARRAY_ELEMENT_CHAR && is_array($json)) {
+            return end($json);
         }
-
+        
         return null;
     }
     /**

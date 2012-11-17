@@ -41,7 +41,9 @@ Now you can use JSON Pointer for PHP via the available Composer **autoload file*
     $one = $jsonPointer->get("/foo"); // int(1)
     $two = $jsonPointer->get("/bar/baz"); // int(2)
     $three = $jsonPointer->get("/qux/0"); // int(3)
-    $five = $jsonPointer->get("/qux/2"); // int(5)
+    $four = $jsonPointer->get("/qux/1"); // int(4)
+    $five = $jsonPointer->get("/qux/-"); // int(5)
+    $five = $jsonPointer->get("/qux/" . JsonPointer::LAST_ARRAY_ELEMENT_CHAR); // int(5)
     $null = $jsonPointer->get("/qux/7"); // null
 
     $one = $jsonPointer->set("/foo", "something"); // int(1) + json.foo = 'something'
@@ -54,7 +56,7 @@ Now you can use JSON Pointer for PHP via the available Composer **autoload file*
 ## Testing
 
     $ phpunit --configuration phpunit.xml.dist
-    OK (39 tests, 71 assertions)
+    OK (41 tests, 73 assertions)
     $
 
 ## License

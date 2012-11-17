@@ -262,6 +262,39 @@ class JsonPointerTest extends \PHPUnit_Framework_TestCase
     }
     /**
      * @test
+     * @dataProvider lastArrayElementsTestDataProvider
+     */
+    public function getShouldReturnLastArrayELementWhenHypenIsGiven($testData)
+    {
+        $givenJson = $testData['given-json'];
+        $jsonPointer = new JsonPointer($givenJson);
+        $this->assertEquals(
+            $testData['expected-element'], 
+            $jsonPointer->get($testData['given-pointer'])
+        );
+    }
+    
+    /**
+     * @return array
+     */
+    public function lastArrayElementsTestDataProvider()
+    {
+        return array(
+            array(array(
+                'given-json' => '{"categories":{"a":{"a1":{"a1a":["a1aa"],"a1b":["a1bb"]},"a2":["a2a","a2b"]}}}',
+                'expected-element' => 'a2b',
+                'given-pointer' => '/categories/a/a2/-')
+            ),
+            array(array(
+                    'given-json' => '{"a2":["a2a","a2b","a2c"]}',
+                    'expected-element' => 'a2c',
+                    'given-pointer' => '/a2/-')
+            ),
+        );
+    }
+    
+    /**
+     * @test
      */
     public function setShouldReplaceValueOfPointerWithSlashInKey()
     {
