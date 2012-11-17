@@ -4,12 +4,35 @@
 
 This is an implementation of [JSON Pointer](http://tools.ietf.org/html/draft-pbryan-zyp-json-pointer-00) written in PHP. Triggered by @janl's node.js [implementation](https://github.com/janl/node-jsonpointer) and being a bit bored.
 
+## Dependencies (managed via [Composer](http://packagist.org/about-composer))
+
+[`JSON Lint for PHP`](https://github.com/Seldaek/jsonlint) by Jordi Boggiano.
+
+## Installation via Composer
+
+Download the [`composer.phar`](http://getcomposer.org/composer.phar) executable if not existent.
+
+Create or modify **composer.json** in the \_\_ROOT_DIRECTORY__ of your project by adding the `php-jsonpointer` dependency. 
+    
+    {
+        "require": {
+            "php-jsonpointer/php-jsonpointer": "master-dev"
+        }
+    }
+
+Run Composer: `php composer.phar install` or `php composer.phar update`
+
 ## Usage
 
+Now you can use JSON Pointer for PHP via the available Composer **autoload file**.
+
     <?php
-    require_once 'src/JsonPointer/JsonPointer.php';
+    require_once 'vendor/autoload.php';
 
     use JsonPointer\JsonPointer;
+
+    $invalidJson = '{"Missing colon" null}';
+    $jsonPointer = new JsonPointer($json); // throws a JsonPointer\Exception
 
     $json = '{"foo":1,"bar":{"baz":2},"qux":[3,4,5]}';
     $jsonPointer = new JsonPointer($json);
@@ -27,38 +50,11 @@ This is an implementation of [JSON Pointer](http://tools.ietf.org/html/draft-pbr
     $something = $jsonPointer->get("/foo"); // null
 
     $all = $jsonPointer->get("/"); // string('{"bar":{"baz":2},"qux":[3,4,5]}')
-
-
-## Installation and usage via [Composer](http://packagist.org/about-composer)
-
-Download the [`composer.phar`](http://getcomposer.org/composer.phar) executable.
-
-Create/modify **composer.json** in the \_\_ROOT_DIRECTORY__ of your project by adding the `php-jsonpointer` dependency. 
     
-    {
-        "require": {
-            "php-jsonpointer/php-jsonpointer": "master-dev"
-        }
-    }
-
-Run Composer: `php composer.phar install` or `php composer.phar update`
-
-Now you can use JSON Pointer for PHP via the available Composer **autoload file**.
-
-    <?php
-    require_once 'vendor/autoload.php';
-
-    use JsonPointer\JsonPointer;
-
-    $json = '{"foo":1,"bar":{"baz":2},"qux":[3,4,5]}';
-    $jsonPointer = new JsonPointer($json);
-
-    $all = $jsonPointer->get("/"); // string('{"foo":1,"bar":{"baz":2},"qux":[3,4,5]}')
-
 ## Testing
 
     $ phpunit --configuration phpunit.xml.dist
-    OK (42 tests, 77 assertions)
+    OK (39 tests, 71 assertions)
     $
 
 ## License

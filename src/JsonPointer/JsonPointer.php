@@ -1,7 +1,9 @@
 <?php
 namespace JsonPointer;
 
-use JsonPointer\Exception as Exception;
+use JsonPointer\Exception as Exception,
+    Seld\JsonLint\JsonParser,
+    Seld\JsonLint\ParsingException;
 /**
   * @author  Raphael Stolt <raphael.stolt@gmail.com>
   */
@@ -14,11 +16,16 @@ class JsonPointer
      */
     private $json;
     /**
-     * @param string $json The Json structure to point through. Should be at least a walkable array.
+     * @param string $json The Json structure to point through.
      */
     public function __construct($json) 
     {
-        $this->json = json_decode($json, true);
+        if ($this->lintJson($json)) {
+            $this->json = json_decode($json, true);
+            if (!$this->isWalkableJson()) {
+                throw new Exception('Non walkable Json to point through');
+            }
+        }
     }
     /**
      * @param string $pointer The Json Pointer
@@ -26,7 +33,6 @@ class JsonPointer
      */
     public function get($pointer)
     {
-        $this->validateJson();
         $this->validatePointer($pointer);
         
         if ($pointer === self::POINTER_CHAR) {
@@ -38,7 +44,7 @@ class JsonPointer
         );
 
         return $this->traverse($this->json, $plainPointerParts);
-    }    
+    }
     /**
      * @param string $pointer The Json Pointer
      * @param string $value   The value to set when pointer matches (null == unset/remove).
@@ -46,7 +52,6 @@ class JsonPointer
      */
     public function set($pointer, $value = null)
     {
-        $this->validateJson();
         $this->validatePointer($pointer);
         
         if ($pointer === self::POINTER_CHAR) {
@@ -105,17 +110,31 @@ class JsonPointer
 
         return null;
     }
-   /**
-    * @throws JsonPointer\Exception
-    */
-    private function validateJson()
+    /**
+     * @param  mixed $json
+     * @return boolean
+     * @throws JsonPointer\Exception
+     */
+    private function lintJson($json)
     {
-        if ($this->json === null) {
-            throw new Exception('Invalid Json to point through');
+        $parser = new JsonParser;
+        $lintResult = $parser->lint($json);
+        if ($lintResult instanceof ParsingException) {
+            $exceptionMessage = 'Cannot operate on invalid Json. Message: ' 
+                . $lintResult->getMessage();
+            throw new Exception($exceptionMessage);
         }
-        if (!is_array($this->json) || count($this->json) === 0) {
-            throw new Exception('Non walkable Json to point through');
+        return true;
+    }
+   /**
+    * @return boolean
+    */
+    private function isWalkableJson()
+    {
+        if ($this->json !== null && is_array($this->json) && count($this->json) > 0) {
+            return true;
         }
+        return false;
     }
     /**
      * @param string $pointer The Json Pointer

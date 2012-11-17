@@ -1,4 +1,5 @@
 <?php
+require_once 'vendor/autoload.php';
 spl_autoload_register(function($class)
 {
     $file = __DIR__ . '/../src/' . strtr($class, '\\', '/') . '.php';
