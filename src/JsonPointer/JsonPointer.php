@@ -4,7 +4,6 @@ namespace JsonPointer;
 use JsonPointer\Exception as Exception;
 /**
   * @author  Raphael Stolt <raphael.stolt@gmail.com>
-  * @license http://is.gd/doowutchyalikewithit Doowutchyalikewithit License
   */
 class JsonPointer
 {
@@ -33,7 +32,10 @@ class JsonPointer
         if ($pointer === self::POINTER_CHAR) {
             return json_encode($this->json);
         }
-        $plainPointerParts = array_slice(array_map('urldecode', explode('/', $pointer)), 1);
+        $plainPointerParts = array_slice(
+            array_map('urldecode', explode('/', $pointer)), 
+            1
+        );
 
         return $this->traverse($this->json, $plainPointerParts);
     }    
@@ -50,7 +52,10 @@ class JsonPointer
         if ($pointer === self::POINTER_CHAR) {
             return json_encode($this->json);
         }
-        $plainPointerParts = array_slice(array_map('urldecode', explode('/', $pointer)), 1);
+        $plainPointerParts = array_slice(
+            array_map('urldecode', explode('/', $pointer)), 
+            1
+        );
 
         $overwrite = false;
         if ($value === null) {
@@ -61,7 +66,7 @@ class JsonPointer
     }
     /**
      * @param  array $json          The json_decode'd Json structure.
-     * @param  array $pointerParts  The parts of the feed pointer.
+     * @param  array $pointerParts  The parts of the fed pointer.
      * @param  mixed $value         The value to use in the set/unset case.
      * @param  mixed $overwrite     Boolean flag for the unset case.
      * @return mixed
@@ -89,14 +94,19 @@ class JsonPointer
 
                 return $json[$pointerPart];
             } else {
-                return $this->traverse($json[$pointerPart], $pointerParts, $value, $overwrite);
+                return $this->traverse(
+                    $json[$pointerPart],
+                    $pointerParts,
+                    $value,
+                    $overwrite
+                );
             }
         }
 
         return null;
     }
    /**
-    * @throws Rs\JsonPointer\Exception
+    * @throws JsonPointer\Exception
     */
     private function validateJson()
     {
@@ -109,7 +119,7 @@ class JsonPointer
     }
     /**
      * @param string $pointer The Json Pointer
-     * @throws Rs\JsonPointer\Exception
+     * @throws JsonPointer\Exception
      */
     private function validatePointer($pointer)
     {
