@@ -32,7 +32,7 @@ Now you can use JSON Pointer for PHP via the available Composer **autoload file*
     use JsonPointer\JsonPointer;
 
     $invalidJson = '{"Missing colon" null}';
-    $jsonPointer = new JsonPointer($json); // throws a JsonPointer\Exception
+    $jsonPointer = new JsonPointer($invalidJson); // throws a JsonPointer\Exception
 
     $json = '{"foo":1,"bar":{"baz":2},"qux":[3,4,5]}';
     $jsonPointer = new JsonPointer($json);
