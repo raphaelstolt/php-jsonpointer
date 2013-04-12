@@ -1,5 +1,5 @@
 <?php
-namespace Json;
+namespace Rs\Json;
 
 use Rs\Json\Pointer;
 use ArrayObject;
