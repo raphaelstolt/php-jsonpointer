@@ -1,7 +1,7 @@
 {
     "name": "php-jsonpointer/php-jsonpointer",
-    "description": "Implementation of JSON Pointer (http://tools.ietf.org/html/draft-pbryan-zyp-json-pointer-00)",
-    "keywords": ["json", "json pointer"],
+    "description": "Implementation of JSON Pointer (http://tools.ietf.org/html/rfc6901)",
+    "keywords": ["json", "json pointer", "json traversal"],
     "homepage": "https://github.com/raphaelstolt/php-jsonpointer",
     "type": "library",
     "license": "MIT",
@@ -14,11 +14,16 @@
     ],
     "require": {
         "php": ">=5.3.0",
-        "seld/jsonlint": "*"
+        "seld/jsonlint": "1.1.*"
     },
     "autoload": {
         "psr-0": {
-            "JsonPointer": "src/"
+            "Rs\\Json": "src/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
         }
     }
 }

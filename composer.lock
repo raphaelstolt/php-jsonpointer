@@ -1,34 +1,37 @@
 {
-    "hash": "5dc1c5502f74de4536860dba5e381121",
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+    ],
+    "hash": "11e9fe35942ff41400f583ff29ce623e",
     "packages": [
         {
             "name": "seld/jsonlint",
-            "version": "1.0.1",
+            "version": "1.1.1",
             "source": {
                 "type": "git",
                 "url": "http://github.com/Seldaek/jsonlint",
-                "reference": "1.0.1"
+                "reference": "1.1.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/Seldaek/jsonlint/zipball/1.0.1",
-                "reference": "1.0.1",
+                "url": "https://api.github.com/repos/Seldaek/jsonlint/zipball/1.1.1",
+                "reference": "1.1.1",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0"
             },
-            "time": "2012-08-13 07:00:11",
             "bin": [
                 "bin/jsonlint"
             ],
             "type": "library",
-            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Seld\\JsonLint": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -43,18 +46,27 @@
             "description": "JSON Linter",
             "keywords": [
                 "json",
-                "parser",
                 "linter",
+                "parser",
                 "validator"
-            ]
+            ],
+            "time": "2013-02-11 23:03:12"
         }
     ],
-    "packages-dev": null,
+    "packages-dev": [
+
+    ],
     "aliases": [
 
     ],
     "minimum-stability": "stable",
     "stability-flags": [
+
+    ],
+    "platform": {
+        "php": ">=5.3.0"
+    },
+    "platform-dev": [
 
     ]
 }

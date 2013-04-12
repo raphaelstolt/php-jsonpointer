@@ -2,7 +2,9 @@
 
 [![Build Status](https://secure.travis-ci.org/raphaelstolt/php-jsonpointer.png)](http://travis-ci.org/raphaelstolt/php-jsonpointer)
 
-This is an implementation of [JSON Pointer](http://tools.ietf.org/html/draft-pbryan-zyp-json-pointer-00) written in PHP. Triggered by @janl's node.js [implementation](https://github.com/janl/node-jsonpointer) and being a bit bored.
+This is an implementation of [JSON Pointer](http://tools.ietf.org/html/rfc6901) written in PHP.
+Triggered by @janl's node.js [implementation](https://github.com/janl/node-jsonpointer) and being
+a bit bore.
 
 ## Dependencies (managed via [Composer](http://packagist.org/about-composer))
 
@@ -10,13 +12,13 @@ This is an implementation of [JSON Pointer](http://tools.ietf.org/html/draft-pbr
 
 ## Installation via Composer
 
-Download the [`composer.phar`](http://getcomposer.org/composer.phar) executable if not existent.
+Download the [`composer.phar`](http://getcomposer.org/composer.phar) executable if nonexistent.
 
-Create or modify **composer.json** in the \_\_ROOT_DIRECTORY__ of your project by adding the `php-jsonpointer` dependency. 
+Create or modify **composer.json** in the \_\_ROOT_DIRECTORY__ of your project by adding the `php-jsonpointer/php-jsonpointer` dependency.
     
     {
         "require": {
-            "php-jsonpointer/php-jsonpointer": "master-dev"
+            "php-jsonpointer/php-jsonpointer": "dev-master"
         }
     }
 
@@ -29,41 +31,51 @@ Now you can use JSON Pointer for PHP via the available Composer **autoload file*
     <?php
     require_once 'vendor/autoload.php';
 
-    use JsonPointer\JsonPointer;
+    use Rs\Json\Pointer;
+    use Rs\Json\Pointer\InvalidJsonException;
+    use Rs\Json\Pointer\NonexistentValueReferencedException;
 
     $invalidJson = '{"Missing colon" null}';
-    $jsonPointer = new JsonPointer($invalidJson); // throws a JsonPointer\Exception
+    try {
+        $jsonPointer = new Pointer($invalidJson);
+    } catch (InvalidJsonException $e) {
+        $message = $e->getMessage(); // Cannot operate on invalid Json. Message: Parse error on line 1: ...
+    }
 
-    $json = '{"foo":1,"bar":{"baz":2},"qux":[3,4,5]}';
-    $jsonPointer = new JsonPointer($json);
+    $json = '{"foo":1,"bar":{"baz":2},"qux":[3,4,5],"m~n":8,"a/b":0,"e^f":3}';
+    $jsonPointer = new Pointer($json);
 
-    $all = $jsonPointer->get("/"); // string('{"foo":1,"bar":{"baz":2},"qux":[3,4,5]}')
-    $one = $jsonPointer->get("/foo"); // int(1)
-    $two = $jsonPointer->get("/bar/baz"); // int(2)
-    $three = $jsonPointer->get("/qux/0"); // int(3)
-    $four = $jsonPointer->get("/qux/1"); // int(4)
-    $five = $jsonPointer->get("/qux/-"); // int(5)
-    $five = $jsonPointer->get("/qux/" . JsonPointer::LAST_ARRAY_ELEMENT_CHAR); // int(5)
-    $null = $jsonPointer->get("/qux/7"); // null
+    try {
+        $all = $jsonPointer->get(""); // string('{"foo":1,"bar":{"baz":2},"qux":[3,4,5],"m~n":8,"a/b":0,"e^f":3}')
+        $one = $jsonPointer->get("/foo"); // int(1)
+        $two = $jsonPointer->get("/bar/baz"); // int(2)
+        $three = $jsonPointer->get("/qux/0"); // int(3)
+        $four = $jsonPointer->get("/qux/1"); // int(4)
+        $five = $jsonPointer->get("/qux/-"); // int(5)
+        $five = $jsonPointer->get("/qux/" . Pointer::LAST_ARRAY_ELEMENT_CHAR); // int(5)
+        $zero = $jsonPointer->get("/a~1b"); // int(0)
+        $eight = $jsonPointer->get("/m~0n"); // int(8)
+        $three = $jsonPointer->get("/e^f"); // int(3)
+        $nonexistent = $jsonPointer->get("/qux/7");
+    } catch (NonexistentValueReferencedException $e) {
+        $message = $e->getMessage(); // Json Pointer '/qux/7' reference a nonexistent value
+    }
 
-    $one = $jsonPointer->set("/foo", "something"); // int(1) + json.foo = 'something'
-    $something = $jsonPointer->get("/foo"); // string('something')
-    $something = $jsonPointer->set("/foo"); // string('something') + json.foo is unset/removed
-    $something = $jsonPointer->get("/foo"); // null
+    // Pointing via URI Fragment Identifier (#)
 
-    $all = $jsonPointer->get("/"); // string('{"bar":{"baz":2},"qux":[3,4,5]}')
+    $all = $jsonPointer->get("#"); // string('{"foo":1,"bar":{"baz":2},"qux":[3,4,5],"m~n":8,"a/b":0,"e^f":3}')
+    $five = $jsonPointer->get("#/qux/-"); // int(5)
+    $three = $jsonPointer->get("#/e^f"); // int(3)
     
 ## Testing
 
-    $ phpunit --configuration phpunit.xml.dist
-    OK (41 tests, 73 assertions)
-    $
+    $ phpunit
 
 ## License
 
 JSON Pointer for PHP is licensed under the MIT License
 
-Copyright (c) 2011-2012 Raphael Stolt
+Copyright (c) 2011 - 2013 Raphael Stolt
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
