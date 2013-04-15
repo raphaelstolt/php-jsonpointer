@@ -88,7 +88,9 @@ class Pointer
             if (count($pointerParts) === 0) {
                 return $json[$pointerPart];
             } else {
-                return $this->traverse($json[$pointerPart], $pointerParts);
+                if (is_array($json[$pointerPart]) && is_array($pointerParts)) {
+                    return $this->traverse($json[$pointerPart], $pointerParts);
+                }
             }
         } elseif ($pointerPart === self::LAST_ARRAY_ELEMENT_CHAR && is_array($json)) {
             return end($json);

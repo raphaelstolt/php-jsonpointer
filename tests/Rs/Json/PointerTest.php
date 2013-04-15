@@ -230,6 +230,7 @@ class PointerTest extends \PHPUnit_Framework_TestCase
             array('["done", "started", "planned","pending","archived"]', '/6'),
             array('{"categories":{"a":{"a1":{"a1a":["a1aa"],"a1b":["a1bb"]},"a2":["a2a","a2b"]}}}', '/categories/b'),
             array('{"a":{"b":{"c":null}}}',  '/a/b/d'),
+            array('{"foo":"bar"}', '/foo/boo'),
         );
     }
     /**
