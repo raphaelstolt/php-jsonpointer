@@ -134,7 +134,7 @@ class Pointer
      */
     private function isWalkableJson()
     {
-        if ($this->json !== null && is_array($this->json) && count($this->json) > 0) {
+        if ($this->json !== null && is_array($this->json)) {
             return true;
         }
         return false;

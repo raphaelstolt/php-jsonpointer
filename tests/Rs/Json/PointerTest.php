@@ -48,7 +48,6 @@ class PointerTest extends \PHPUnit_Framework_TestCase
         $jsonPointer = new Pointer($nonWalkableJson);
         $jsonPointer->get('/');
     }
-
     /**
      * @test
      */
@@ -183,6 +182,16 @@ class PointerTest extends \PHPUnit_Framework_TestCase
         $jsonPointer = new Pointer($givenJson);
         $this->assertSame($expectedValue, $jsonPointer->get('#' . $pointer));
     }
+    /**
+     * @test
+     */
+    public function getShouldReturnEmptyJson()
+    {
+        $givenJson = $expectedValue = '[]';
+        $jsonPointer = new Pointer($givenJson);
+
+        $this->assertSame($expectedValue, $jsonPointer->get(''));
+    }
 
     /**
      * @return array
@@ -265,7 +274,7 @@ class PointerTest extends \PHPUnit_Framework_TestCase
         return array(
           array('6'),
           array(15),
-          array('[]'),
+          array('null'),
         );
     }
 }
