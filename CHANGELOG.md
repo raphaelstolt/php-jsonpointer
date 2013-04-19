@@ -1,3 +1,7 @@
+### v1.0.0-RC2
+  * [] is considered as walkable JSON - closes #3
+  * Fixed bug in recursive traverse
+
 ### v1.0.0-RC1
   * Implemented missing parts of JSON Pointer [RFC 6901](http://tools.ietf.org/html/rfc6901)
   * Dropped support of `set`, as it's not specified in RFC 6901 and should be handled by `JSON Patch` [RFC 6902](http://tools.ietf.org/html/rfc6902)
