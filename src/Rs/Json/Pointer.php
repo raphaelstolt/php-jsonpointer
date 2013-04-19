@@ -96,7 +96,7 @@ class Pointer
             return end($json);
         } elseif (is_array($json) && count($json) < $pointerPart) {
             // Do nothing, let Exception bubble up
-        } elseif (array_key_exists($pointerPart, $json) && $json[$pointerPart] === NULL) {
+        } elseif (array_key_exists($pointerPart, $json) && $json[$pointerPart] === null) {
             return $json[$pointerPart];
         }
         $exceptionMessage = sprintf(
@@ -115,14 +115,14 @@ class Pointer
     private function lintJson($json)
     {
         if (!class_exists('Seld\\JsonLint\\JsonParser')) {
-            throw new \RuntimeException('Unable to lint Json as JsonLint is not installed.');
+            throw new \RuntimeException('Unable to lint Json as JsonLint is not installed');
         }
 
         $parser = new JsonParser;
         $lintResult = $parser->lint($json);
 
         if ($lintResult instanceof ParsingException) {
-            $exceptionMessage = 'Cannot operate on invalid Json. Message: ' 
+            $exceptionMessage = 'Cannot operate on invalid Json. Message: '
                 . $lintResult->getMessage();
             throw new InvalidJsonException($exceptionMessage);
         }
