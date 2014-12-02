@@ -11,7 +11,6 @@ use Seld\JsonLint\ParsingException;
 class Pointer
 {
     const POINTER_CHAR = '/';
-    const POINTER_URI_FRAGMENT_IDENTIFIER_CHAR = '#';
     const LAST_ARRAY_ELEMENT_CHAR = '-';
     
     /**
@@ -47,15 +46,11 @@ class Pointer
      */
     public function get($pointer)
     {
-        if ($pointer === '' || $pointer === self::POINTER_URI_FRAGMENT_IDENTIFIER_CHAR) {
+        if ($pointer === '') {
             return json_encode($this->json);
         }
 
         $this->validatePointer($pointer);
-
-        if (substr($pointer, 0, 1) === self::POINTER_URI_FRAGMENT_IDENTIFIER_CHAR) {
-            $pointer = substr($pointer, 1, strlen($pointer));
-        }
 
         $this->pointer = $pointer;
 
@@ -152,8 +147,7 @@ class Pointer
         
         $firstPointerCharacter = substr($pointer, 0, 1);
         
-        if ($firstPointerCharacter !== self::POINTER_CHAR 
-            && $firstPointerCharacter !== self::POINTER_URI_FRAGMENT_IDENTIFIER_CHAR)
+        if ($firstPointerCharacter !== self::POINTER_CHAR)
         {
             throw new InvalidPointerException('Pointer starts with invalid character');
         }

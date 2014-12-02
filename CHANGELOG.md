@@ -1,3 +1,6 @@
+### v1.1.0-RC1
+  * Dropped handling of special URI Fragment identifier # - closes #5
+
 ### v1.0.0-RC2
   * [] is considered as walkable JSON - closes #3
   * Fixed bug in recursive traverse

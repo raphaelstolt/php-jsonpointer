@@ -60,12 +60,6 @@ Now you can use JSON Pointer for PHP via the available Composer **autoload file*
     } catch (NonexistentValueReferencedException $e) {
         $message = $e->getMessage(); // Json Pointer '/qux/7' reference a nonexistent value
     }
-
-    // Pointing via URI Fragment Identifier (#)
-
-    $all = $jsonPointer->get("#"); // string('{"foo":1,"bar":{"baz":2},"qux":[3,4,5],"m~n":8,"a/b":0,"e^f":3}')
-    $five = $jsonPointer->get("#/qux/-"); // int(5)
-    $three = $jsonPointer->get("#/e^f"); // int(3)
     
 ## Testing
 

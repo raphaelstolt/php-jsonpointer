@@ -18,13 +18,14 @@ class PointerTest extends \PHPUnit_Framework_TestCase
     }
     /**
      * @test
+     * @dataProvider invalidPointerCharProvider
      * @expectedException Rs\Json\Pointer\InvalidPointerException
      * @expectedExceptionMessage Pointer starts with invalid character
      */
-    public function getShouldThrowExpectedExceptionWhenPointerStartsWithInvalidPointerChar()
+    public function getShouldThrowExpectedExceptionWhenPointerStartsWithInvalidPointerChar($invalidPointerChar)
     {
         $jsonPointer = new Pointer('{"a": 1}');
-        $jsonPointer->get('*');
+        $jsonPointer->get($invalidPointerChar);
     }
     /**
      * @test
@@ -167,30 +168,23 @@ class PointerTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function theUriFragmentIdentifierIsNotConsideredAsAnInvalidPointer()
-    {
-        $jsonPointer = new Pointer('{"a":1, "b":[0, 1]}');
-        $this->assertEquals('{"a":1,"b":[0,1]}', $jsonPointer->get('#'));
-    }
-    /**
-     * @dataProvider specSpecialCaseProvider
-     * @test
-     */
-    public function specialUriFragmentIdentifierCasesFromSpecAreMatched($expectedValue, $pointer)
-    {
-        $givenJson = '{"foo":["bar","baz"],"":0,"a/b":1,"c%d":2,"e^f":3,"g|h":4,"k\"l":6," ":7,"m~n":8}';
-        $jsonPointer = new Pointer($givenJson);
-        $this->assertSame($expectedValue, $jsonPointer->get('#' . $pointer));
-    }
-    /**
-     * @test
-     */
     public function getShouldReturnEmptyJson()
     {
         $givenJson = $expectedValue = '[]';
         $jsonPointer = new Pointer($givenJson);
 
         $this->assertSame($expectedValue, $jsonPointer->get(''));
+    }
+
+    /**
+     * @return array
+     */
+    public function invalidPointerCharProvider()
+    {
+        return array(
+            array('*'),
+            array('#'),
+        );
     }
 
     /**
