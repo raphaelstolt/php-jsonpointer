@@ -6,10 +6,6 @@ This is an implementation of [JSON Pointer](http://tools.ietf.org/html/rfc6901) 
 Triggered by @janl's node.js [implementation](https://github.com/janl/node-jsonpointer) and being
 a bit bore.
 
-## Dependencies (managed via [Composer](http://packagist.org/about-composer))
-
-[`JSON Lint for PHP`](https://github.com/Seldaek/jsonlint) by Jordi Boggiano.
-
 ## Installation via Composer
 
 Download the [`composer.phar`](http://getcomposer.org/composer.phar) executable if nonexistent.

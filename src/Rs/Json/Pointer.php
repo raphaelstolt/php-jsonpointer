@@ -5,8 +5,6 @@ use Rs\Json\Pointer\InvalidJsonException;
 use Rs\Json\Pointer\InvalidPointerException;
 use Rs\Json\Pointer\NonexistentValueReferencedException;
 use Rs\Json\Pointer\NonWalkableJsonException;
-use Seld\JsonLint\JsonParser;
-use Seld\JsonLint\ParsingException;
 
 class Pointer
 {
@@ -30,11 +28,14 @@ class Pointer
      */
     public function __construct($json) 
     {
-        if ($this->lintJson($json)) {
-            $this->json = json_decode($json, true);
-            if (!$this->isWalkableJson()) {
-                throw new NonWalkableJsonException('Non walkable Json to point through');
-            }
+        $this->json = json_decode($json, true);
+        
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw new InvalidJsonException('Cannot operate on invalid Json.');
+        }
+
+        if (!$this->isWalkableJson()) {
+            throw new NonWalkableJsonException('Non walkable Json to point through');
         }
     }
 
@@ -99,29 +100,6 @@ class Pointer
             $this->getPointer()
         );
         throw new NonexistentValueReferencedException($exceptionMessage);
-    }
-
-    /**
-     * @param  mixed $json The Json structure to lint.
-     * @return boolean
-     * @throws RuntimeException
-     * @throws Rs\Json\Pointer\InvalidJsonException
-     */
-    private function lintJson($json)
-    {
-        if (!class_exists('Seld\\JsonLint\\JsonParser')) {
-            throw new \RuntimeException('Unable to lint Json as JsonLint is not installed');
-        }
-
-        $parser = new JsonParser;
-        $lintResult = $parser->lint($json);
-
-        if ($lintResult instanceof ParsingException) {
-            $exceptionMessage = 'Cannot operate on invalid Json. Message: '
-                . $lintResult->getMessage();
-            throw new InvalidJsonException($exceptionMessage);
-        }
-        return true;
     }
 
     /**
