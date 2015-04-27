@@ -8,7 +8,7 @@ class PointerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @expectedException Rs\Json\Pointer\InvalidJsonException
-     * @expectedExceptionMessage Cannot operate on invalid Json. Message:
+     * @expectedExceptionMessage Cannot operate on invalid Json.
      * @dataProvider invalidJsonProvider
      * @test
      */
