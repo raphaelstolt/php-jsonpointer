@@ -65,7 +65,7 @@ Now you can use JSON Pointer for PHP via the available Composer **autoload file*
 
 JSON Pointer for PHP is licensed under the MIT License
 
-Copyright (c) 2011 - 2013 Raphael Stolt
+Copyright (c) 2011 - 2015 Raphael Stolt
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
