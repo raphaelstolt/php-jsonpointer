@@ -1,3 +1,6 @@
+### v1.1.0
+  * Official release
+
 ### v1.1.0-RC1
   * Dropped handling of special URI Fragment identifier # - closes #5
 
