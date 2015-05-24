@@ -10,7 +10,7 @@ class Pointer
 {
     const POINTER_CHAR = '/';
     const LAST_ARRAY_ELEMENT_CHAR = '-';
-    
+
     /**
      * @var array
      */
@@ -26,10 +26,10 @@ class Pointer
      * @throws Rs\Json\Pointer\InvalidJsonException
      * @throws Rs\Json\Pointer\NonWalkableJsonException
      */
-    public function __construct($json) 
+    public function __construct($json)
     {
         $this->json = json_decode($json, true);
-        
+
         if (json_last_error() !== JSON_ERROR_NONE) {
             throw new InvalidJsonException('Cannot operate on invalid Json.');
         }
@@ -41,9 +41,10 @@ class Pointer
 
     /**
      * @param  string $pointer The Json Pointer.
-     * @return mixed
      * @throws Rs\Json\Pointer\InvalidPointerException
      * @throws Rs\Json\Pointer\NonexistentValueReferencedException
+     *
+     * @return mixed
      */
     public function get($pointer)
     {
@@ -56,7 +57,7 @@ class Pointer
         $this->pointer = $pointer;
 
         $plainPointerParts = array_slice(
-            array_map('urldecode', explode('/', $pointer)), 
+            array_map('urldecode', explode('/', $pointer)),
             1
         );
         return $this->traverse($this->json, $this->evaluatePointerParts($plainPointerParts));
@@ -73,8 +74,9 @@ class Pointer
     /**
      * @param  array $json          The json_decoded Json structure.
      * @param  array $pointerParts  The parts of the fed pointer.
-     * @return mixed
      * @throws Rs\Json\Pointer\NonexistentValueReferencedException
+     *
+     * @return mixed
      */
     private function traverse(array &$json, array $pointerParts)
     {
@@ -83,10 +85,9 @@ class Pointer
         if (isset($json[$pointerPart])) {
             if (count($pointerParts) === 0) {
                 return $json[$pointerPart];
-            } else {
-                if (is_array($json[$pointerPart]) && is_array($pointerParts)) {
-                    return $this->traverse($json[$pointerPart], $pointerParts);
-                }
+            }
+            if (is_array($json[$pointerPart]) && is_array($pointerParts)) {
+                return $this->traverse($json[$pointerPart], $pointerParts);
             }
         } elseif ($pointerPart === self::LAST_ARRAY_ELEMENT_CHAR && is_array($json)) {
             return end($json);
@@ -122,17 +123,17 @@ class Pointer
         if ($pointer !== '' && !is_string($pointer)) {
             throw new InvalidPointerException('Pointer is not a string');
         }
-        
+
         $firstPointerCharacter = substr($pointer, 0, 1);
-        
-        if ($firstPointerCharacter !== self::POINTER_CHAR)
-        {
+
+        if ($firstPointerCharacter !== self::POINTER_CHAR) {
             throw new InvalidPointerException('Pointer starts with invalid character');
         }
     }
 
     /**
      * @param  array $pointerParts The Json Pointer parts to evaluate.
+     *
      * @return array
      */
     private function evaluatePointerParts(array $pointerParts)
