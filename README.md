@@ -8,22 +8,14 @@ a bit bore.
 
 ## Installation via Composer
 
-Download the [`composer.phar`](http://getcomposer.org/composer.phar) executable if nonexistent.
-
-Create or modify **composer.json** in the \_\_ROOT_DIRECTORY__ of your project by adding the `php-jsonpointer/php-jsonpointer` dependency.
-    
-    {
-        "require": {
-            "php-jsonpointer/php-jsonpointer": "dev-master"
-        }
-    }
-
-Run Composer: `php composer.phar install` or `php composer.phar update`
+``` bash
+$ composer require php-jsonpointer/php-jsonpointer
+```
 
 ## Usage
 
 Now you can use JSON Pointer for PHP via the available Composer **autoload file**.
-
+``` php
     <?php
     require_once 'vendor/autoload.php';
 
@@ -56,11 +48,12 @@ Now you can use JSON Pointer for PHP via the available Composer **autoload file*
     } catch (NonexistentValueReferencedException $e) {
         $message = $e->getMessage(); // Json Pointer '/qux/7' reference a nonexistent value
     }
-    
+```
 ## Testing
 
+``` bash
     $ phpunit
-
+```
 ## License
 
-This library is licensed under the MIT License. Please see [License File](LICENSE.md) for more information.
+This library is licensed under the MIT License. Please see [License file](LICENSE.md) for more information.
