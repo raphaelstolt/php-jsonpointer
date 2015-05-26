@@ -52,7 +52,7 @@ try {
 ## Testing
 
 ``` bash
-$ phpunit
+$ composer test
 ```
 ## License
 
