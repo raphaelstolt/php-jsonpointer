@@ -9,7 +9,7 @@ a bit bore.
 ## Installation via Composer
 
 ``` bash
-$ composer require php-jsonpointer/php-jsonpointer
+$ composer require php-jsonpointer/php-jsonpointer:1.*
 ```
 
 ## Usage
