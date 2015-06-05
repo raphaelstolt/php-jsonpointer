@@ -1,6 +1,6 @@
 # JSON Pointer for PHP
 
-[![Build Status](https://secure.travis-ci.org/raphaelstolt/php-jsonpointer.png)](http://travis-ci.org/raphaelstolt/php-jsonpointer)
+[![Build Status](https://secure.travis-ci.org/raphaelstolt/php-jsonpointer.png)](http://travis-ci.org/raphaelstolt/php-jsonpointer) [![Version](http://img.shields.io/packagist/v/php-jsonpointer/php-jsonpointer.svg?style=flat)](https://packagist.org/packages/php-jsonpointer/php-jsonpointer) [![PHP Version](http://img.shields.io/badge/php-5.3+-ff69b4.svg)](https://packagist.org/packages/php-jsonpointer/php-jsonpointer)
 
 This is an implementation of [JSON Pointer](http://tools.ietf.org/html/rfc6901) written in PHP.
 Triggered by @janl's node.js [implementation](https://github.com/janl/node-jsonpointer) and being
