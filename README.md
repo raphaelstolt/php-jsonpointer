@@ -2,17 +2,15 @@
 
 [![Build Status](https://secure.travis-ci.org/raphaelstolt/php-jsonpointer.png)](http://travis-ci.org/raphaelstolt/php-jsonpointer) [![Version](http://img.shields.io/packagist/v/php-jsonpointer/php-jsonpointer.svg?style=flat)](https://packagist.org/packages/php-jsonpointer/php-jsonpointer) [![PHP Version](http://img.shields.io/badge/php-5.3+-ff69b4.svg)](https://packagist.org/packages/php-jsonpointer/php-jsonpointer)
 
-This is an implementation of [JSON Pointer](http://tools.ietf.org/html/rfc6901) written in PHP.
-Triggered by @janl's node.js [implementation](https://github.com/janl/node-jsonpointer) and being
-a bit bore.
+This is an implementation of [JSON Pointer](http://tools.ietf.org/html/rfc6901) written in PHP. Triggered by @janl's node.js [implementation](https://github.com/janl/node-jsonpointer) and being a bit bored.
 
-## Installation via Composer
+### Installation via Composer
 
 ``` bash
 $ composer require php-jsonpointer/php-jsonpointer
 ```
 
-## Usage
+### Usage
 
 Now you can use JSON Pointer for PHP via the available Composer **autoload file**.
 ``` php
@@ -49,11 +47,16 @@ try {
     $message = $e->getMessage(); // Json Pointer '/qux/7' reference a nonexistent value
 }
 ```
-## Testing
+
+### Changelog
+Please see [CHANGELOG](CHANGELOG.md) for more information.
+
+### Running tests
 
 ``` bash
 $ composer test
 ```
-## License
 
-This library is licensed under the MIT License. Please see [License file](LICENSE.md) for more information.
+### License
+
+This library is licensed under the MIT License. Please see [LICENSE](LICENSE.md) for more information.
