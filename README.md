@@ -48,9 +48,6 @@ try {
 }
 ```
 
-### Changelog
-Please see [CHANGELOG](CHANGELOG.md) for more information.
-
 ### Running tests
 
 ``` bash
@@ -60,3 +57,6 @@ $ composer test
 ### License
 
 This library is licensed under the MIT License. Please see [LICENSE](LICENSE.md) for more information.
+
+### Changelog
+Please see [CHANGELOG](CHANGELOG.md) for more information.
