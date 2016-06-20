@@ -49,7 +49,7 @@ class Pointer
     public function get($pointer)
     {
         if ($pointer === '') {
-            return json_encode($this->json);
+            return json_encode($this->json, JSON_UNESCAPED_UNICODE);
         }
 
         $this->validatePointer($pointer);

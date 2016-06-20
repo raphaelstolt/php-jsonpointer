@@ -66,6 +66,20 @@ class PointerTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function getShouldNotEscapeUnicode()
+    {
+        $givenJson = '{"status":["第","二","个"]}';
+        $jsonPointer = new Pointer($givenJson);
+        $pointedJson = $jsonPointer->get('');
+        $this->assertEquals(
+            $givenJson,
+            $pointedJson,
+            'Escaped unicode between given and pointed Json'
+        );
+    }
+    /**
+     * @test
+     */
     public function getPointerShouldReturnFedPointer()
     {
         $givenJson = '{"status": ["done", "started", "planned"]}';
@@ -91,6 +105,15 @@ class PointerTest extends \PHPUnit_Framework_TestCase
         $givenJson = '["done", "started", "planned","pending","archived"]';
         $jsonPointer = new Pointer($givenJson);
         $this->assertEquals('pending', $jsonPointer->get('/3'));
+    }
+    /**
+     * @test
+     */
+    public function getShouldReturnExpectedValueOfFourthElementWithNoEscapeUnicode()
+    {
+        $givenJson = '["done", "started", "planned","第二个","archived"]';
+        $jsonPointer = new Pointer($givenJson);
+        $this->assertEquals('第二个', $jsonPointer->get('/3'));
     }
     /**
      * @test

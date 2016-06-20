@@ -1,3 +1,6 @@
+### v2.0.0
+  * Dropped PHP 5.3 support to avoid escaped unicode [#21](https://github.com/raphaelstolt/php-jsonpatch/issues/21)
+
 ### v1.1.0
   * Official release
 
