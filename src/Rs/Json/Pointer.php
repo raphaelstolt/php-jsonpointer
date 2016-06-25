@@ -142,7 +142,7 @@ class Pointer
         $evaluations = array('/', '~');
 
         $parts = array();
-        array_filter($pointerParts, function($v) use(&$parts, &$searchables, &$evaluations) {
+        array_filter($pointerParts, function ($v) use (&$parts, &$searchables, &$evaluations) {
             return $parts[] = str_replace($searchables, $evaluations, $v);
         });
         return $parts;

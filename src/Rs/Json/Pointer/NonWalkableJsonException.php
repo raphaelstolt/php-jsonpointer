@@ -1,4 +1,6 @@
 <?php
 namespace Rs\Json\Pointer;
 
-class NonWalkableJsonException extends \Exception {}
+class NonWalkableJsonException extends \Exception
+{
+}

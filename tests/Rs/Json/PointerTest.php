@@ -14,7 +14,7 @@ class PointerTest extends \PHPUnit_Framework_TestCase
      */
     public function constructShouldThrowExpectedExceptionWhenUsingInvalidJson($invalidJson)
     {
-         $jsonPointer = new Pointer($invalidJson);
+        $jsonPointer = new Pointer($invalidJson);
     }
     /**
      * @test
@@ -162,7 +162,7 @@ class PointerTest extends \PHPUnit_Framework_TestCase
         $givenJson = $testData['given-json'];
         $jsonPointer = new Pointer($givenJson);
         $this->assertEquals(
-            $testData['expected-element'], 
+            $testData['expected-element'],
             $jsonPointer->get($testData['given-pointer'])
         );
     }
