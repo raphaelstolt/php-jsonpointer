@@ -7,7 +7,7 @@ use ArrayObject;
 class PointerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @expectedException Rs\Json\Pointer\InvalidJsonException
+     * @expectedException \Rs\Json\Pointer\InvalidJsonException
      * @expectedExceptionMessage Cannot operate on invalid Json.
      * @dataProvider invalidJsonProvider
      * @test
@@ -19,7 +19,7 @@ class PointerTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * @dataProvider invalidPointerCharProvider
-     * @expectedException Rs\Json\Pointer\InvalidPointerException
+     * @expectedException \Rs\Json\Pointer\InvalidPointerException
      * @expectedExceptionMessage Pointer starts with invalid character
      */
     public function getShouldThrowExpectedExceptionWhenPointerStartsWithInvalidPointerChar($invalidPointerChar)
@@ -30,7 +30,7 @@ class PointerTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * @dataProvider nonStringPointerProvider
-     * @expectedException Rs\Json\Pointer\InvalidPointerException
+     * @expectedException \Rs\Json\Pointer\InvalidPointerException
      * @expectedExceptionMessage Pointer is not a string
      */
     public function getShouldThrowExpectedExceptionWhenPointerIsNotAString($nonStringPointer)
@@ -39,7 +39,7 @@ class PointerTest extends \PHPUnit_Framework_TestCase
         $jsonPointer->get($nonStringPointer);
     }
     /**
-     * @expectedException Rs\Json\Pointer\NonWalkableJsonException
+     * @expectedException \Rs\Json\Pointer\NonWalkableJsonException
      * @expectedExceptionMessage Non walkable Json to point through
      * @dataProvider nonWalkableJsonProvider
      * @test
@@ -62,6 +62,17 @@ class PointerTest extends \PHPUnit_Framework_TestCase
             $pointedJson,
             'Unexpected mismatch between given and pointed Json'
         );
+    }
+    /**
+     * @test
+     */
+    public function getShouldNotCastEmptyObjectsToArrays()
+    {
+        $givenJson = '{"foo":{"bar":{},"baz":"qux"}}';
+        $jsonPointer = new Pointer($givenJson);
+        $pointedJson = $jsonPointer->get('/foo');
+        $this->assertTrue(($pointedJson instanceof \stdClass));
+        $this->assertTrue(($pointedJson->bar instanceof \stdClass));
     }
     /**
      * @test
@@ -117,7 +128,7 @@ class PointerTest extends \PHPUnit_Framework_TestCase
     }
     /**
      * @test
-     * @expectedException Rs\Json\Pointer\NonexistentValueReferencedException
+     * @expectedException \Rs\Json\Pointer\NonexistentValueReferencedException
      * @expectedExceptionMessage Json Pointer
      * @dataProvider nonexistentValueProvider
      */
