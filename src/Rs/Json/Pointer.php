@@ -23,12 +23,12 @@ class Pointer
 
     /**
      * @param  string $json The Json structure to point through.
-     * @throws Rs\Json\Pointer\InvalidJsonException
-     * @throws Rs\Json\Pointer\NonWalkableJsonException
+     * @throws \Rs\Json\Pointer\InvalidJsonException
+     * @throws \Rs\Json\Pointer\NonWalkableJsonException
      */
     public function __construct($json)
     {
-        $this->json = json_decode($json, true);
+        $this->json = json_decode($json);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
             throw new InvalidJsonException('Cannot operate on invalid Json.');
@@ -41,15 +41,17 @@ class Pointer
 
     /**
      * @param  string $pointer The Json Pointer.
-     * @throws Rs\Json\Pointer\InvalidPointerException
-     * @throws Rs\Json\Pointer\NonexistentValueReferencedException
+     * @throws \Rs\Json\Pointer\InvalidPointerException
+     * @throws \Rs\Json\Pointer\NonexistentValueReferencedException
      *
      * @return mixed
      */
     public function get($pointer)
     {
         if ($pointer === '') {
-            return json_encode($this->json, JSON_UNESCAPED_UNICODE);
+            $output = json_encode($this->json, JSON_UNESCAPED_UNICODE);
+            // workaround for https://bugs.php.net/bug.php?id=46600
+            return str_replace('"_empty_"', '""', $output);
         }
 
         $this->validatePointer($pointer);
@@ -72,28 +74,44 @@ class Pointer
     }
 
     /**
-     * @param  array $json          The json_decoded Json structure.
+     * @param  array|\stdClass $json          The json_decoded Json structure.
      * @param  array $pointerParts  The parts of the fed pointer.
-     * @throws Rs\Json\Pointer\NonexistentValueReferencedException
+     *
+     * @throws \Rs\Json\Pointer\NonexistentValueReferencedException
      *
      * @return mixed
      */
-    private function traverse(array &$json, array $pointerParts)
+    private function traverse(&$json, array $pointerParts)
     {
         $pointerPart = array_shift($pointerParts);
 
-        if (isset($json[$pointerPart])) {
+        if (is_array($json) && isset($json[$pointerPart])) {
             if (count($pointerParts) === 0) {
                 return $json[$pointerPart];
             }
             if (is_array($json[$pointerPart]) && is_array($pointerParts)) {
                 return $this->traverse($json[$pointerPart], $pointerParts);
             }
+        } elseif (is_object($json) && array_key_exists($pointerPart, get_object_vars($json))) {
+            if (count($pointerParts) === 0) {
+                return $json->{$pointerPart};
+            }
+            if ((is_object($json->{$pointerPart}) || is_array($json->{$pointerPart})) && is_array($pointerParts)) {
+                return $this->traverse($json->{$pointerPart}, $pointerParts);
+            }
+        } elseif (is_object($json) && empty($pointerPart) && array_key_exists('_empty_', get_object_vars($json))) {
+            $pointerPart = '_empty_';
+            if (count($pointerParts) === 0) {
+                return $json->{$pointerPart};
+            }
+            if ((is_object($json->{$pointerPart}) || is_array($json->{$pointerPart})) && is_array($pointerParts)) {
+                return $this->traverse($json->{$pointerPart}, $pointerParts);
+            }
         } elseif ($pointerPart === self::LAST_ARRAY_ELEMENT_CHAR && is_array($json)) {
             return end($json);
         } elseif (is_array($json) && count($json) < $pointerPart) {
             // Do nothing, let Exception bubble up
-        } elseif (array_key_exists($pointerPart, $json) && $json[$pointerPart] === null) {
+        } elseif (is_array($json) && array_key_exists($pointerPart, $json) && $json[$pointerPart] === null) {
             return $json[$pointerPart];
         }
         $exceptionMessage = sprintf(
@@ -108,7 +126,7 @@ class Pointer
      */
     private function isWalkableJson()
     {
-        if ($this->json !== null && is_array($this->json)) {
+        if ($this->json !== null && (is_array($this->json) || $this->json instanceof \stdClass)) {
             return true;
         }
         return false;
@@ -116,7 +134,7 @@ class Pointer
 
     /**
      * @param  string $pointer The Json Pointer to validate.
-     * @throws Rs\Json\Pointer\InvalidPointerException
+     * @throws \Rs\Json\Pointer\InvalidPointerException
      */
     private function validatePointer($pointer)
     {
