@@ -1,3 +1,6 @@
+### v3.0.0
+  * Fixed bug to avoid casting of empty objects to arrays [#9](https://github.com/raphaelstolt/php-jsonpointer/pull/9)
+
 ### v2.0.1
   * Excluded EditorConfig configuration from release
 
