@@ -1,3 +1,6 @@
+### v3.0.1
+  * Fixed bug in checking integerish access keys [#10](https://github.com/raphaelstolt/php-jsonpointer/pull/10)
+
 ### v3.0.0
   * Fixed bug to avoid casting of empty objects to arrays [#9](https://github.com/raphaelstolt/php-jsonpointer/pull/9)
 
