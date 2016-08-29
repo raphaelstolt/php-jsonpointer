@@ -180,6 +180,17 @@ class PointerTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function getShouldTraverseToObjectPropertiesAfterArrayIndex()
+    {
+        $givenJson = '{"foo": {"bar": {"baz": [ {"bar":"baz"}, {"bar":"qux"} ] }}}';
+        $jsonPointer = new Pointer($givenJson);
+
+        $this->assertEquals('baz', $jsonPointer->get('/foo/bar/baz/0/bar'));
+        $this->assertEquals('qux', $jsonPointer->get('/foo/bar/baz/1/bar'));
+    }
+    /**
+     * @test
+     */
     public function referenceTokenGettingEvaluated()
     {
         $givenJson = '{"a/b/c": 1, "m~n": 8, "a": {"b": {"c": 12} } }';
