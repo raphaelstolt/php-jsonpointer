@@ -1,3 +1,6 @@
+### v3.0.2
+  * Fixed bug when deeper nested objects exist after an array index [#11](https://github.com/raphaelstolt/php-jsonpointer/pull/11)
+
 ### v3.0.1
   * Fixed bug in checking integerish access keys [#10](https://github.com/raphaelstolt/php-jsonpointer/pull/10)
 
