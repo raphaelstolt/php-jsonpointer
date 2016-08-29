@@ -89,7 +89,7 @@ class Pointer
             if (count($pointerParts) === 0) {
                 return $json[$pointerPart];
             }
-            if (is_array($json[$pointerPart]) && is_array($pointerParts)) {
+            if ((is_array($json[$pointerPart]) || is_object($json[$pointerPart])) && is_array($pointerParts)) {
                 return $this->traverse($json[$pointerPart], $pointerParts);
             }
         } elseif (is_object($json) && in_array($pointerPart, array_keys(get_object_vars($json)))) {
