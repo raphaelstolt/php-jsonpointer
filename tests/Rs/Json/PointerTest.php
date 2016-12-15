@@ -1,8 +1,8 @@
 <?php
 namespace Rs\Json;
 
-use Rs\Json\Pointer;
 use ArrayObject;
+use Rs\Json\Pointer;
 
 class PointerTest extends \PHPUnit_Framework_TestCase
 {
