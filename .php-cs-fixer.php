@@ -7,16 +7,17 @@ $finder = Finder::create()
     ->in(__DIR__);
 
 $rules = [
-    'psr0' => false,
+    'psr_autoloading' => false,
     '@PSR2' => true,
     'phpdoc_order' => true,
     'ordered_imports' => true,
 ];
 
-$cacheDir = getenv('TRAVIS') ? getenv('HOME') . '/.php-cs-fixer' : __DIR__;
+$cacheDir = getenv('HOME') ? getenv('HOME') : __DIR__;
 
-return Config::create()
-    ->setRules($rules)
+$config = new Config();
+
+return $config->setRules($rules)
     ->setFinder($finder)
-    ->setCacheFile($cacheDir . '/.php_cs.cache');
+    ->setCacheFile($cacheDir . '/.php-cs-fixer.cache');
 

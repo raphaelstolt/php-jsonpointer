@@ -3,7 +3,7 @@
 .editorconfig export-ignore
 .gitattributes export-ignore
 .gitignore export-ignore
-.php_cs export-ignore
+.php-cs-fixer.php export-ignore
 .github export-ignore
 CHANGELOG.md export-ignore
 CONTRIBUTING.md export-ignore

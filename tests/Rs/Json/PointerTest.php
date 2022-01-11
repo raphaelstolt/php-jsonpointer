@@ -1,51 +1,60 @@
-<?php
+<?php declare(strict_types=1);
 namespace Rs\Json;
 
 use ArrayObject;
+use PHPUnit\Framework\TestCase;
 use Rs\Json\Pointer;
+use Rs\Json\Pointer\InvalidJsonException;
+use Rs\Json\Pointer\InvalidPointerException;
+use Rs\Json\Pointer\NonexistentValueReferencedException;
+use Rs\Json\Pointer\NonWalkableJsonException;
 
-class PointerTest extends \PHPUnit_Framework_TestCase
+class PointerTest extends TestCase
 {
     /**
-     * @expectedException \Rs\Json\Pointer\InvalidJsonException
-     * @expectedExceptionMessage Cannot operate on invalid Json.
      * @dataProvider invalidJsonProvider
      * @test
      */
     public function constructShouldThrowExpectedExceptionWhenUsingInvalidJson($invalidJson)
     {
+        $this->expectException(InvalidJsonException::class);
+        $this->expectExceptionMessage('Cannot operate on invalid Json.');
+
         $jsonPointer = new Pointer($invalidJson);
     }
     /**
      * @test
      * @dataProvider invalidPointerCharProvider
-     * @expectedException \Rs\Json\Pointer\InvalidPointerException
-     * @expectedExceptionMessage Pointer starts with invalid character
      */
     public function getShouldThrowExpectedExceptionWhenPointerStartsWithInvalidPointerChar($invalidPointerChar)
     {
+        $this->expectException(InvalidPointerException::class);
+        $this->expectExceptionMessage('Pointer starts with invalid character');
+
         $jsonPointer = new Pointer('{"a": 1}');
         $jsonPointer->get($invalidPointerChar);
     }
     /**
      * @test
      * @dataProvider nonStringPointerProvider
-     * @expectedException \Rs\Json\Pointer\InvalidPointerException
-     * @expectedExceptionMessage Pointer is not a string
      */
     public function getShouldThrowExpectedExceptionWhenPointerIsNotAString($nonStringPointer)
     {
+        $this->expectException(InvalidPointerException::class);
+        $this->expectExceptionMessage('Pointer is not a string');
+
         $jsonPointer = new Pointer('{"a": 1}');
         $jsonPointer->get($nonStringPointer);
     }
     /**
-     * @expectedException \Rs\Json\Pointer\NonWalkableJsonException
-     * @expectedExceptionMessage Non walkable Json to point through
      * @dataProvider nonWalkableJsonProvider
      * @test
      */
     public function getShouldThrowExpectedExceptionWhenUsingNonWalkableJson($nonWalkableJson)
     {
+        $this->expectException(NonWalkableJsonException::class);
+        $this->expectExceptionMessage('Non walkable Json to point through');
+
         $jsonPointer = new Pointer($nonWalkableJson);
         $jsonPointer->get('/');
     }
@@ -57,6 +66,7 @@ class PointerTest extends \PHPUnit_Framework_TestCase
         $givenJson = '{"status":["done","started","planned"]}';
         $jsonPointer = new Pointer($givenJson);
         $pointedJson = $jsonPointer->get('');
+
         $this->assertJsonStringEqualsJsonString(
             $givenJson,
             $pointedJson,
@@ -71,6 +81,7 @@ class PointerTest extends \PHPUnit_Framework_TestCase
         $givenJson = '{"foo":{"bar":{},"baz":"qux"}}';
         $jsonPointer = new Pointer($givenJson);
         $pointedJson = $jsonPointer->get('/foo');
+
         $this->assertTrue(($pointedJson instanceof \stdClass));
         $this->assertTrue(($pointedJson->bar instanceof \stdClass));
     }
@@ -82,6 +93,7 @@ class PointerTest extends \PHPUnit_Framework_TestCase
         $givenJson = '{"status":["第","二","个"]}';
         $jsonPointer = new Pointer($givenJson);
         $pointedJson = $jsonPointer->get('');
+
         $this->assertEquals(
             $givenJson,
             $pointedJson,
@@ -97,6 +109,7 @@ class PointerTest extends \PHPUnit_Framework_TestCase
         $jsonPointer = new Pointer($givenJson);
         $pointer = '/status/1';
         $pointedJson = $jsonPointer->get($pointer);
+
         $this->assertEquals($pointer, $jsonPointer->getPointer());
     }
     /**
@@ -106,6 +119,7 @@ class PointerTest extends \PHPUnit_Framework_TestCase
     {
         $givenJson = '{"status": ["done", "started", "planned"]}';
         $jsonPointer = new Pointer($givenJson);
+
         $this->assertEquals('started', $jsonPointer->get('/status/1'));
     }
     /**
@@ -115,6 +129,7 @@ class PointerTest extends \PHPUnit_Framework_TestCase
     {
         $givenJson = '["done", "started", "planned","pending","archived"]';
         $jsonPointer = new Pointer($givenJson);
+
         $this->assertEquals('pending', $jsonPointer->get('/3'));
     }
     /**
@@ -124,16 +139,18 @@ class PointerTest extends \PHPUnit_Framework_TestCase
     {
         $givenJson = '["done", "started", "planned","第二个","archived"]';
         $jsonPointer = new Pointer($givenJson);
+
         $this->assertEquals('第二个', $jsonPointer->get('/3'));
     }
     /**
      * @test
-     * @expectedException \Rs\Json\Pointer\NonexistentValueReferencedException
-     * @expectedExceptionMessage Json Pointer
      * @dataProvider nonexistentValueProvider
      */
     public function getShouldThrowExpectedExceptionWhenNonexistentValueIsReferenced($givenJson, $givenPointer)
     {
+        $this->expectException(NonexistentValueReferencedException::class);
+        $this->expectExceptionMessage('Json Pointer');
+
         $jsonPointer = new Pointer($givenJson);
         $jsonPointer->get($givenPointer);
     }
@@ -144,6 +161,7 @@ class PointerTest extends \PHPUnit_Framework_TestCase
     {
         $givenJson = '{"a":{"b":null}}';
         $jsonPointer = new Pointer($givenJson);
+
         $this->assertNull($jsonPointer->get('/a/b'));
     }
     /**
@@ -153,6 +171,7 @@ class PointerTest extends \PHPUnit_Framework_TestCase
     {
         $givenJson = '{"categories":{"a":{"a1":{"a1a":["a1aa"],"a1b":["a1bb"]},"a2":["a2a","a2b"]}}}';
         $jsonPointer = new Pointer($givenJson);
+
         $this->assertEquals('a2b', $jsonPointer->get('/categories/a/a2/1'));
     }
     /**
@@ -162,6 +181,7 @@ class PointerTest extends \PHPUnit_Framework_TestCase
     {
         $givenJson = '{"test/foo.txt":{"size":1521,"description":"Text File"}}';
         $jsonPointer = new Pointer($givenJson);
+
         $this->assertEquals(1521, $jsonPointer->get('/test%2Ffoo.txt/size'));
     }
     /**
@@ -172,6 +192,7 @@ class PointerTest extends \PHPUnit_Framework_TestCase
     {
         $givenJson = $testData['given-json'];
         $jsonPointer = new Pointer($givenJson);
+
         $this->assertEquals(
             $testData['expected-element'],
             $jsonPointer->get($testData['given-pointer'])
@@ -208,6 +229,7 @@ class PointerTest extends \PHPUnit_Framework_TestCase
     {
         $givenJson = '{"foo":["bar","baz"],"":0,"a/b":1,"c%d":2,"e^f":3,"g|h":4,"k\"l":6," ":7,"m~n":8}';
         $jsonPointer = new Pointer($givenJson);
+
         $this->assertSame($expectedValue, $jsonPointer->get($pointer));
     }
     /**
