@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+## [v4.0.0] - 2020-01-11
+### Removed
+- Dropped support for unsupported PHP versions
 
 ## [v3.0.2] - 2016-08-29
 ### Fixed
