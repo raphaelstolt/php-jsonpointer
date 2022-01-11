@@ -26,6 +26,8 @@ jobs:
 
       - name: Install PHP
         uses: shivammathur/setup-php@v2
+        with:
+          php-version: "${{ matrix.php }}"
 
       - name: Install Composer dependencies
         run: composer update --no-progress --no-suggest --prefer-dist --optimize-autoloader
