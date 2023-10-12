@@ -30,8 +30,8 @@
     },
     "scripts": {
         "test": "phpunit",
-        "cs-fix": "php-cs-fixer fix . -vv || true",
-        "cs-lint": "php-cs-fixer fix --diff --stop-on-violation --verbose --dry-run",
+        "cs-fix": "php-cs-fixer fix . -vv --allow-risky=yes || true",
+        "cs-lint": "php-cs-fixer fix --diff --stop-on-violation --verbose --allow-risky=yes --dry-run",
         "validate-gitattributes": "lean-package-validator validate"
     },
     "extra": {

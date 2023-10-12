@@ -28,9 +28,9 @@ class Pointer
      */
     public function __construct($json)
     {
-        $this->json = json_decode($json);
+        $this->json = \json_decode($json);
 
-        if (json_last_error() !== JSON_ERROR_NONE) {
+        if (\json_last_error() !== JSON_ERROR_NONE) {
             throw new InvalidJsonException('Cannot operate on invalid Json.');
         }
 
@@ -49,17 +49,17 @@ class Pointer
     public function get($pointer)
     {
         if ($pointer === '') {
-            $output = json_encode($this->json, JSON_UNESCAPED_UNICODE);
+            $output = \json_encode($this->json, JSON_UNESCAPED_UNICODE);
             // workaround for https://bugs.php.net/bug.php?id=46600
-            return str_replace('"_empty_"', '""', $output);
+            return \str_replace('"_empty_"', '""', $output);
         }
 
         $this->validatePointer($pointer);
 
         $this->pointer = $pointer;
 
-        $plainPointerParts = array_slice(
-            array_map('urldecode', explode('/', $pointer)),
+        $plainPointerParts = \array_slice(
+            \array_map('urldecode', \explode('/', $pointer)),
             1
         );
         return $this->traverse($this->json, $this->evaluatePointerParts($plainPointerParts));
@@ -83,38 +83,38 @@ class Pointer
      */
     private function traverse(&$json, array $pointerParts)
     {
-        $pointerPart = array_shift($pointerParts);
+        $pointerPart = \array_shift($pointerParts);
 
-        if (is_array($json) && isset($json[$pointerPart])) {
-            if (count($pointerParts) === 0) {
+        if (\is_array($json) && isset($json[$pointerPart])) {
+            if (\count($pointerParts) === 0) {
                 return $json[$pointerPart];
             }
-            if ((is_array($json[$pointerPart]) || is_object($json[$pointerPart])) && is_array($pointerParts)) {
+            if ((\is_array($json[$pointerPart]) || \is_object($json[$pointerPart])) && \is_array($pointerParts)) {
                 return $this->traverse($json[$pointerPart], $pointerParts);
             }
-        } elseif (is_object($json) && in_array($pointerPart, array_keys(get_object_vars($json)))) {
-            if (count($pointerParts) === 0) {
+        } elseif (\is_object($json) && \in_array($pointerPart, \array_keys(\get_object_vars($json)))) {
+            if (\count($pointerParts) === 0) {
                 return $json->{$pointerPart};
             }
-            if ((is_object($json->{$pointerPart}) || is_array($json->{$pointerPart})) && is_array($pointerParts)) {
+            if ((\is_object($json->{$pointerPart}) || \is_array($json->{$pointerPart})) && \is_array($pointerParts)) {
                 return $this->traverse($json->{$pointerPart}, $pointerParts);
             }
-        } elseif (is_object($json) && empty($pointerPart) && array_key_exists('_empty_', get_object_vars($json))) {
+        } elseif (\is_object($json) && empty($pointerPart) && \array_key_exists('_empty_', \get_object_vars($json))) {
             $pointerPart = '_empty_';
-            if (count($pointerParts) === 0) {
+            if (\count($pointerParts) === 0) {
                 return $json->{$pointerPart};
             }
-            if ((is_object($json->{$pointerPart}) || is_array($json->{$pointerPart})) && is_array($pointerParts)) {
+            if ((\is_object($json->{$pointerPart}) || \is_array($json->{$pointerPart})) && \is_array($pointerParts)) {
                 return $this->traverse($json->{$pointerPart}, $pointerParts);
             }
-        } elseif ($pointerPart === self::LAST_ARRAY_ELEMENT_CHAR && is_array($json)) {
-            return end($json);
-        } elseif (is_array($json) && count($json) < $pointerPart) {
+        } elseif ($pointerPart === self::LAST_ARRAY_ELEMENT_CHAR && \is_array($json)) {
+            return \end($json);
+        } elseif (\is_array($json) && \count($json) < $pointerPart) {
             // Do nothing, let Exception bubble up
-        } elseif (is_array($json) && array_key_exists($pointerPart, $json) && $json[$pointerPart] === null) {
+        } elseif (\is_array($json) && \array_key_exists($pointerPart, $json) && $json[$pointerPart] === null) {
             return $json[$pointerPart];
         }
-        $exceptionMessage = sprintf(
+        $exceptionMessage = \sprintf(
             "Json Pointer '%s' references a nonexistent value",
             $this->getPointer()
         );
@@ -126,7 +126,7 @@ class Pointer
      */
     private function isWalkableJson()
     {
-        if ($this->json !== null && (is_array($this->json) || $this->json instanceof \stdClass)) {
+        if ($this->json !== null && (\is_array($this->json) || $this->json instanceof \stdClass)) {
             return true;
         }
         return false;
@@ -138,11 +138,11 @@ class Pointer
      */
     private function validatePointer($pointer)
     {
-        if ($pointer !== '' && !is_string($pointer)) {
+        if ($pointer !== '' && !\is_string($pointer)) {
             throw new InvalidPointerException('Pointer is not a string');
         }
 
-        $firstPointerCharacter = substr($pointer, 0, 1);
+        $firstPointerCharacter = \substr($pointer, 0, 1);
 
         if ($firstPointerCharacter !== self::POINTER_CHAR) {
             throw new InvalidPointerException('Pointer starts with invalid character');
@@ -160,8 +160,8 @@ class Pointer
         $evaluations = array('/', '~');
 
         $parts = array();
-        array_filter($pointerParts, function ($v) use (&$parts, &$searchables, &$evaluations) {
-            return $parts[] = str_replace($searchables, $evaluations, $v);
+        \array_filter($pointerParts, function ($v) use (&$parts, &$searchables, &$evaluations) {
+            return $parts[] = \str_replace($searchables, $evaluations, $v);
         });
         return $parts;
     }
