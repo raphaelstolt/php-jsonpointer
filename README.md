@@ -7,7 +7,7 @@ This is an implementation of [JSON Pointer](http://tools.ietf.org/html/rfc6901) 
 ### Installation via Composer
 
 ``` bash
-$ composer require php-jsonpointer/php-jsonpointer
+composer require php-jsonpointer/php-jsonpointer
 ```
 
 ### Usage
@@ -51,7 +51,7 @@ try {
 ### Running tests
 
 ``` bash
-$ composer test
+composer test
 ```
 
 ### License
