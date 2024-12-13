@@ -2,6 +2,8 @@
 namespace Rs\Json;
 
 use ArrayObject;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Rs\Json\Pointer;
 use Rs\Json\Pointer\InvalidJsonException;
@@ -11,10 +13,8 @@ use Rs\Json\Pointer\NonWalkableJsonException;
 
 class PointerTest extends TestCase
 {
-    /**
-     * @dataProvider invalidJsonProvider
-     * @test
-     */
+    #[Test]
+    #[DataProvider('invalidJsonProvider')]
     public function constructShouldThrowExpectedExceptionWhenUsingInvalidJson($invalidJson)
     {
         $this->expectException(InvalidJsonException::class);
@@ -22,10 +22,9 @@ class PointerTest extends TestCase
 
         $jsonPointer = new Pointer($invalidJson);
     }
-    /**
-     * @test
-     * @dataProvider invalidPointerCharProvider
-     */
+
+    #[Test]
+    #[DataProvider('invalidPointerCharProvider')]
     public function getShouldThrowExpectedExceptionWhenPointerStartsWithInvalidPointerChar($invalidPointerChar)
     {
         $this->expectException(InvalidPointerException::class);
@@ -34,10 +33,9 @@ class PointerTest extends TestCase
         $jsonPointer = new Pointer('{"a": 1}');
         $jsonPointer->get($invalidPointerChar);
     }
-    /**
-     * @test
-     * @dataProvider nonStringPointerProvider
-     */
+
+    #[Test]
+    #[DataProvider('nonStringPointerProvider')]
     public function getShouldThrowExpectedExceptionWhenPointerIsNotAString($nonStringPointer)
     {
         $this->expectException(InvalidPointerException::class);
@@ -46,10 +44,9 @@ class PointerTest extends TestCase
         $jsonPointer = new Pointer('{"a": 1}');
         $jsonPointer->get($nonStringPointer);
     }
-    /**
-     * @dataProvider nonWalkableJsonProvider
-     * @test
-     */
+
+    #[Test]
+    #[DataProvider('nonWalkableJsonProvider')]
     public function getShouldThrowExpectedExceptionWhenUsingNonWalkableJson($nonWalkableJson)
     {
         $this->expectException(NonWalkableJsonException::class);
@@ -58,9 +55,8 @@ class PointerTest extends TestCase
         $jsonPointer = new Pointer($nonWalkableJson);
         $jsonPointer->get('/');
     }
-    /**
-     * @test
-     */
+
+    #[Test]
     public function getShouldReturnGivenJsonWhenUsingOnlyARootPointer()
     {
         $givenJson = '{"status":["done","started","planned"]}';
@@ -73,9 +69,8 @@ class PointerTest extends TestCase
             'Unexpected mismatch between given and pointed Json'
         );
     }
-    /**
-     * @test
-     */
+
+    #[Test]
     public function getShouldNotCastEmptyObjectsToArrays()
     {
         $givenJson = '{"foo":{"bar":{},"baz":"qux"}}';
@@ -85,9 +80,8 @@ class PointerTest extends TestCase
         $this->assertTrue(($pointedJson instanceof \stdClass));
         $this->assertTrue(($pointedJson->bar instanceof \stdClass));
     }
-    /**
-     * @test
-     */
+
+    #[Test]
     public function getShouldNotEscapeUnicode()
     {
         $givenJson = '{"status":["第","二","个"]}';
@@ -100,9 +94,8 @@ class PointerTest extends TestCase
             'Escaped unicode between given and pointed Json'
         );
     }
-    /**
-     * @test
-     */
+
+    #[Test]
     public function getPointerShouldReturnFedPointer()
     {
         $givenJson = '{"status": ["done", "started", "planned"]}';
@@ -112,9 +105,8 @@ class PointerTest extends TestCase
 
         $this->assertEquals($pointer, $jsonPointer->getPointer());
     }
-    /**
-     * @test
-     */
+
+    #[Test]
     public function getShouldReturnExpectedValueOfSecondElementBelowNamedPointer()
     {
         $givenJson = '{"status": ["done", "started", "planned"]}';
@@ -122,9 +114,8 @@ class PointerTest extends TestCase
 
         $this->assertEquals('started', $jsonPointer->get('/status/1'));
     }
-    /**
-     * @test
-     */
+
+    #[Test]
     public function getShouldReturnExpectedValueOfFourthElement()
     {
         $givenJson = '["done", "started", "planned","pending","archived"]';
@@ -132,9 +123,8 @@ class PointerTest extends TestCase
 
         $this->assertEquals('pending', $jsonPointer->get('/3'));
     }
-    /**
-     * @test
-     */
+
+    #[Test]
     public function getShouldReturnExpectedValueOfFourthElementWithNoEscapeUnicode()
     {
         $givenJson = '["done", "started", "planned","第二个","archived"]';
@@ -142,10 +132,9 @@ class PointerTest extends TestCase
 
         $this->assertEquals('第二个', $jsonPointer->get('/3'));
     }
-    /**
-     * @test
-     * @dataProvider nonexistentValueProvider
-     */
+
+    #[Test]
+    #[DataProvider('nonexistentValueProvider')]
     public function getShouldThrowExpectedExceptionWhenNonexistentValueIsReferenced($givenJson, $givenPointer)
     {
         $this->expectException(NonexistentValueReferencedException::class);
@@ -154,9 +143,8 @@ class PointerTest extends TestCase
         $jsonPointer = new Pointer($givenJson);
         $jsonPointer->get($givenPointer);
     }
-    /**
-     * @test
-     */
+
+    #[Test]
     public function getShouldReturnNullAsAValidValue()
     {
         $givenJson = '{"a":{"b":null}}';
@@ -164,9 +152,8 @@ class PointerTest extends TestCase
 
         $this->assertNull($jsonPointer->get('/a/b'));
     }
-    /**
-     * @test
-     */
+
+    #[Test]
     public function getShouldReturnExpectedValueOfSecondElementBelowDeepNamedPointer()
     {
         $givenJson = '{"categories":{"a":{"a1":{"a1a":["a1aa"],"a1b":["a1bb"]},"a2":["a2a","a2b"]}}}';
@@ -174,9 +161,8 @@ class PointerTest extends TestCase
 
         $this->assertEquals('a2b', $jsonPointer->get('/categories/a/a2/1'));
     }
-    /**
-     * @test
-     */
+
+    #[Test]
     public function getShouldReturnExpectedValueOfPointerWithSlashInKey()
     {
         $givenJson = '{"test/foo.txt":{"size":1521,"description":"Text File"}}';
@@ -184,10 +170,9 @@ class PointerTest extends TestCase
 
         $this->assertEquals(1521, $jsonPointer->get('/test%2Ffoo.txt/size'));
     }
-    /**
-     * @test
-     * @dataProvider lastArrayElementsTestDataProvider
-     */
+
+    #[Test]
+    #[DataProvider('lastArrayElementsTestDataProvider')]
     public function getShouldReturnLastArrayElementWhenHypenIsGiven($testData)
     {
         $givenJson = $testData['given-json'];
@@ -198,9 +183,8 @@ class PointerTest extends TestCase
             $jsonPointer->get($testData['given-pointer'])
         );
     }
-    /**
-     * @test
-     */
+
+    #[Test]
     public function getShouldTraverseToObjectPropertiesAfterArrayIndex()
     {
         $givenJson = '{"foo": {"bar": {"baz": [ {"bar":"baz"}, {"bar":"qux"} ] }}}';
@@ -209,9 +193,7 @@ class PointerTest extends TestCase
         $this->assertEquals('baz', $jsonPointer->get('/foo/bar/baz/0/bar'));
         $this->assertEquals('qux', $jsonPointer->get('/foo/bar/baz/1/bar'));
     }
-    /**
-     * @test
-     */
+    #[Test]
     public function referenceTokenGettingEvaluated()
     {
         $givenJson = '{"a/b/c": 1, "m~n": 8, "a": {"b": {"c": 12} } }';
@@ -221,10 +203,9 @@ class PointerTest extends TestCase
         $this->assertEquals(8, $jsonPointer->get('/m~0n'));
         $this->assertEquals(12, $jsonPointer->get('/a/b/c'));
     }
-    /**
-     * @dataProvider specSpecialCaseProvider
-     * @test
-     */
+
+    #[Test]
+    #[DataProvider('specSpecialCaseProvider')]
     public function specialCasesFromSpecAreMatched($expectedValue, $pointer)
     {
         $givenJson = '{"foo":["bar","baz"],"":0,"a/b":1,"c%d":2,"e^f":3,"g|h":4,"k\"l":6," ":7,"m~n":8}';
@@ -232,9 +213,8 @@ class PointerTest extends TestCase
 
         $this->assertSame($expectedValue, $jsonPointer->get($pointer));
     }
-    /**
-     * @test
-     */
+
+    #[Test]
     public function getShouldReturnEmptyJson()
     {
         $givenJson = $expectedValue = '[]';
@@ -246,7 +226,7 @@ class PointerTest extends TestCase
     /**
      * @return array
      */
-    public function invalidPointerCharProvider()
+    public static function invalidPointerCharProvider(): array
     {
         return array(
             array('*'),
@@ -257,7 +237,7 @@ class PointerTest extends TestCase
     /**
      * @return array
      */
-    public function lastArrayElementsTestDataProvider()
+    public static function lastArrayElementsTestDataProvider(): array
     {
         return array(
             array(array(
@@ -275,7 +255,7 @@ class PointerTest extends TestCase
     /**
      * @return array
      */
-    public function specSpecialCaseProvider()
+    public static function specSpecialCaseProvider(): array
     {
         return array(
           array('{"foo":["bar","baz"],"":0,"a\/b":1,"c%d":2,"e^f":3,"g|h":4,"k\"l":6," ":7,"m~n":8}', ''),
@@ -294,7 +274,7 @@ class PointerTest extends TestCase
     /**
      * @return array
      */
-    public function nonexistentValueProvider()
+    public static function nonexistentValueProvider(): array
     {
         return array(
             array('["done", "started", "planned","pending","archived"]', '/6'),
@@ -306,7 +286,7 @@ class PointerTest extends TestCase
     /**
      * @return array
      */
-    public function nonStringPointerProvider()
+    public static function nonStringPointerProvider(): array
     {
         return array(
           array(array()),
@@ -318,7 +298,7 @@ class PointerTest extends TestCase
     /**
      * @return array
      */
-    public function invalidJsonProvider()
+    public static function invalidJsonProvider(): array
     {
         return array(
           array('['),
@@ -330,7 +310,7 @@ class PointerTest extends TestCase
     /**
      * @return array
      */
-    public function nonWalkableJsonProvider()
+    public static function nonWalkableJsonProvider(): array
     {
         return array(
           array('6'),
