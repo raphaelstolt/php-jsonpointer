@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
+
 namespace Rs\Json;
 
 use ArrayObject;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use Rs\Json\Pointer;
 use Rs\Json\Pointer\InvalidJsonException;
 use Rs\Json\Pointer\InvalidPointerException;
 use Rs\Json\Pointer\NonexistentValueReferencedException;
@@ -258,7 +258,7 @@ class PointerTest extends TestCase
     public static function specSpecialCaseProvider(): array
     {
         return array(
-          array('{"foo":["bar","baz"],"":0,"a\/b":1,"c%d":2,"e^f":3,"g|h":4,"k\"l":6," ":7,"m~n":8}', ''),
+          array('{"foo":["bar","baz"],"":0,"a/b":1,"c%d":2,"e^f":3,"g|h":4,"k\"l":6," ":7,"m~n":8}', ''),
           array(array('bar', 'baz'), '/foo'),
           array('bar', '/foo/0'),
           array(0, '/'),
@@ -268,7 +268,7 @@ class PointerTest extends TestCase
           array(4, '/g|h'),
           array(6, "/k\"l"),
           array(7, '/ '),
-          array(8, '/m~0n'),
+          array(8, '/m~0n')
         );
     }
     /**

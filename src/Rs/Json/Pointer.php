@@ -1,4 +1,5 @@
 <?php
+
 namespace Rs\Json;
 
 use Rs\Json\Pointer\InvalidJsonException;
@@ -19,12 +20,12 @@ class Pointer
     /**
      * @var string
      */
-    private $pointer;
+    private string $pointer;
 
     /**
      * @param  string $json The Json structure to point through.
-     * @throws \Rs\Json\Pointer\InvalidJsonException
-     * @throws \Rs\Json\Pointer\NonWalkableJsonException
+     * @throws InvalidJsonException
+     * @throws NonWalkableJsonException
      */
     public function __construct($json)
     {
@@ -41,17 +42,17 @@ class Pointer
 
     /**
      * @param  string $pointer The Json Pointer.
-     * @throws \Rs\Json\Pointer\InvalidPointerException
-     * @throws \Rs\Json\Pointer\NonexistentValueReferencedException
+     * @throws InvalidPointerException
+     * @throws NonexistentValueReferencedException
      *
      * @return mixed
      */
-    public function get($pointer)
+    public function get($pointer) :mixed
     {
         if ($pointer === '') {
             $output = \json_encode($this->json, JSON_UNESCAPED_UNICODE);
             // workaround for https://bugs.php.net/bug.php?id=46600
-            return \str_replace('"_empty_"', '""', $output);
+            return \str_replace(["_empty_", "\/"], ["", "/"], $output);
         }
 
         $this->validatePointer($pointer);
@@ -62,13 +63,14 @@ class Pointer
             \array_map('urldecode', \explode('/', $pointer)),
             1
         );
+
         return $this->traverse($this->json, $this->evaluatePointerParts($plainPointerParts));
     }
 
     /**
      * @return string
      */
-    public function getPointer()
+    public function getPointer(): string
     {
         return $this->pointer;
     }
@@ -77,12 +79,13 @@ class Pointer
      * @param  array|\stdClass $json The json_decoded Json structure.
      * @param  array $pointerParts   The parts of the fed pointer.
      *
-     * @throws \Rs\Json\Pointer\NonexistentValueReferencedException
+     * @throws NonexistentValueReferencedException
      *
      * @return mixed
      */
-    private function traverse(&$json, array $pointerParts)
+    private function traverse(&$json, array $pointerParts) :mixed
     {
+
         $pointerPart = \array_shift($pointerParts);
 
         if (\is_array($json) && isset($json[$pointerPart])) {
@@ -124,7 +127,7 @@ class Pointer
     /**
      * @return boolean
      */
-    private function isWalkableJson()
+    private function isWalkableJson(): bool
     {
         if ($this->json !== null && (\is_array($this->json) || $this->json instanceof \stdClass)) {
             return true;
@@ -134,7 +137,7 @@ class Pointer
 
     /**
      * @param  string $pointer The Json Pointer to validate.
-     * @throws \Rs\Json\Pointer\InvalidPointerException
+     * @throws InvalidPointerException
      */
     private function validatePointer($pointer)
     {
@@ -154,12 +157,12 @@ class Pointer
      *
      * @return array
      */
-    private function evaluatePointerParts(array $pointerParts)
+    private function evaluatePointerParts(array $pointerParts): array
     {
-        $searchables = array('~1', '~0');
-        $evaluations = array('/', '~');
+        $searchables = ['~1', '~0'];
+        $evaluations = ['/', '~'];
 
-        $parts = array();
+        $parts = [];
         \array_filter($pointerParts, function ($v) use (&$parts, &$searchables, &$evaluations) {
             return $parts[] = \str_replace($searchables, $evaluations, $v);
         });
