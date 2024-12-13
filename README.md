@@ -44,7 +44,7 @@ try {
     $three = $jsonPointer->get("/e^f"); // int(3)
     $nonexistent = $jsonPointer->get("/qux/7");
 } catch (NonexistentValueReferencedException $e) {
-    $message = $e->getMessage(); // Json Pointer '/qux/7' reference a nonexistent value
+    $message = $e->getMessage(); // Json Pointer '/qux/7' references a nonexistent value
 }
 ```
 
